@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Poppins;
+  src: url("../public/fonts/Poppins-Regular.ttf");
+}
+
+@font-face{
+  font-family: LibreBaskerville;
+  src: url("../public/fonts/LibreBaskerville-Regular.ttf");
+
+  font-family: Lena;
+  src: url("../public/fonts/Lena.ttf");
+
+  /* font-family: CaviarDreams;
+  src: url("../public/fonts/CaviarDreams.ttf"); */
+}
+
+:root {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@theme{
+  --font-Poppins: Poppins, "sans-seriff";
+  --font-LibreBaskerville: LibreBaskerville, "sans-serif";
+  --font-Lena: Lena;
+  --font-CaviarDreams: CaviarDreams;
+}
