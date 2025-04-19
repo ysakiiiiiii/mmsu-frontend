@@ -1,12 +1,36 @@
-# React + Vite
+# 🧢 MMSU Merchandise
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Welcome to the official repository for **MMSU Merchandise** — your one-stop shop for high-quality, school-pride gear from Mariano Marcos State University!
 
-Currently, two official plugins are available:
+🔗 GitHub Repo: [ysakiiiiiii/mmsumerch](https://github.com/ysakiiiiiii/mmsumerch.git)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚧 Project Status: In Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+This project is currently a work in progress.  
+✅ **Navbar with Protected Routing** is already completed.  
+🛠️ The following sections are **still under development**:
+
+### 🔧 To-Do List for Collaborators
+
+- 📄 **About Page** – Add info about MMSU and merchandise  
+- 📜 **Footer** – Include contact details, social media, etc.  
+- 🔐 **Login Page** – Create login form and authentication flow  
+- 🛠️ **Admin Page** – For managing products/orders  
+- 🏪 **Store Page** – Display available merchandise  
+- 🏠 **Home Page** – Create landing content for visitors  
+
+Please coordinate tasks and branch names for smoother collaboration.
+
+---
+
+## 🧪 Getting Started
+
+### 📁 Clone the Repository
+```bash
+git clone https://github.com/ysakiiiiiii/mmsumerch.git
+cd mmsumerch
+
+npm install
+npm run dev
