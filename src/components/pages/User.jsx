@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { AuthContext } from '../../auth/AuthWrapper';
 
 export const Account = () => {
 
-  const { user } = AuthContext();
+  const { user } = useContext(AuthContext);
 
   return (
        <div className="page">

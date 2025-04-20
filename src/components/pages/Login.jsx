@@ -3,11 +3,11 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthWrapper";
 import { Marginer } from "../marginer";
-import { motion } from "framer-motion"; // Make sure it's imported
+import { motion } from "framer-motion";
 
 const BoxContainer = styled.div`
   width: 280px;
-  min-height: 550px;
+  min-height: 600px;
   display: flex;
   flex-direction: column;
   border-radius: 19px;
@@ -21,7 +21,7 @@ export const FormContainer = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  z-index: 5; /* Ensures the form stays on top */
+  z-index: 5; 
 `;
 
 const TopContainer = styled.div`
@@ -44,12 +44,8 @@ const BackDrop = styled(motion.div)`
   top: -290px;
   left: -70px;
   transform: rotate(60deg);
-  background: linear-gradient(
-    58deg,
-    rgba(243, 172, 18, 1) 20%,
-    rgba(241, 196, 15, 1) 100%
-  );
-  z-index: 1; /* Ensure the backdrop stays behind the form */
+  background: linear-gradient(to top left, #10b981, #84cc16);
+  z-index: 10;
 `;
 
 const HeaderContainer = styled.div`
@@ -97,11 +93,12 @@ const Input = styled.input`
 
   &:focus {
     outline: none;
-    border-bottom: 1px solid rgba(241, 196, 15, 1);
+    border-bottom: 1px solid #16a34a;
   }
 `;
 
 export const SubmitButton = styled.button`
+  margin: 0 auto;
   width: 100%;
   max-width: 150px;
   padding: 10px;
@@ -112,25 +109,18 @@ export const SubmitButton = styled.button`
   border-radius: 100px;
   cursor: pointer;
   transition: all 240ms ease-in-out;
-  background: linear-gradient(
-    58deg,
-    rgba(243, 172, 18, 1) 20%,
-    rgba(241, 196, 15, 1) 100%
-  );
+  background: linear-gradient(to top left, #10b981, #84cc16);
   box-shadow: 0 0 5px rgba(241, 196, 15, 0.3);
 
   &:hover {
     filter: brightness(1.03);
-    background: linear-gradient(
-      58deg,
-      rgba(243, 172, 18, 1) 10%,
-      rgba(241, 196, 15, 1) 100%
-    );
+    background: linear-gradient(to top left, #10b981, #84cc16);
     box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
   }
 `;
 
 const LineText = styled.p`
+  margin: 0 auto;
   font-size: 12px;
   color: rgba(200, 200, 200, 0.8);
   font-weight: 500;
@@ -138,7 +128,7 @@ const LineText = styled.p`
 
 const BoldLink = styled.a`
   font-size: 12px;
-  color: rgba(241, 196, 15, 1);
+  color: #15803d;
   font-weight: 500;
   text-decoration: none;
   border-bottom: 1px dashed rgba(241, 196, 15, 1);
@@ -153,13 +143,17 @@ const MutedLink = styled.a`
 `;
 
 export function Login(props) {
+
   const { login, signup, switchToSignup, switchToLogin, isSignup } =
     useContext(AuthContext);
+
   const navigate = useNavigate();
+
   const [formData, setFormData] = useReducer(
     (formData, newItem) => ({ ...formData, ...newItem }),
-    { userName: "", password: "" }
+    { userName: "", email: "", password: "", repeatPassword: "" }
   );
+
   const [errorMessage, setErrorMessage] = useState(null);
   const [isExpanded, setExpanded] = useState(false);
 
@@ -203,7 +197,7 @@ export function Login(props) {
   };
 
   return (
-    <BoxContainer>
+    <BoxContainer className="font-Poppins m-auto mt-10">
       <TopContainer>
         <BackDrop
           initial={false}
@@ -224,7 +218,7 @@ export function Login(props) {
           }}
           transition={{ type: "spring", duration: 2.3, stiffness: 30 }}
         />
-        <HeaderContainer>
+        <HeaderContainer className="cursor-pointer">
           <HeaderText>
             {isSignup ? "Create Account" : "Welcome Back"}
           </HeaderText>
@@ -234,19 +228,43 @@ export function Login(props) {
         </HeaderContainer>
       </TopContainer>
       <InnerContainer>
+        
         <FormContainer>
+          {isSignup && (
+            <Input
+              type="text"
+              placeholder="Username"
+              value={formData.userName}
+              onChange={(e) => setFormData({ userName: e.target.value })}
+            />
+          )}
+
           <Input
             type="text"
             placeholder="Email"
-            value={formData.userName}
+            value={formData.userName || ""}
             onChange={(e) => setFormData({ userName: e.target.value })}
           />
+          
+
           <Input
             type="password"
             placeholder="Password"
             value={formData.password}
             onChange={(e) => setFormData({ password: e.target.value })}
           />
+
+          {isSignup && (
+            <Input
+              type="password"
+              placeholder="Repeat Password"
+              value={formData.repeatPassword || ""}
+              onChange={(e) => setFormData({ repeatPassword: e.target.value })}
+            />
+          )}
+
+        {errorMessage && <div className="error text-xs text-red-500 italic">{errorMessage}</div>}
+
         </FormContainer>
         <Marginer direction="vertical" margin={10} />
         <MutedLink href="#">Forget your password?</MutedLink>
@@ -254,13 +272,12 @@ export function Login(props) {
         <SubmitButton type="submit" onClick={isSignup ? doSignup : doLogin}>
           {isSignup ? "Sign Up" : "Sign In"}
         </SubmitButton>
-        {errorMessage && <div className="error">{errorMessage}</div>}
-        <Marginer direction="vertical" margin="5px" />
-        <LineText>
+        <Marginer className="m-2" />
+        <LineText className="cursor-pointer">
           {isSignup ? (
             <>
               Already have an account?{" "}
-              <BoldLink onClick={handleSwitchToLogin}>Sign In</BoldLink>
+              <BoldLink onClick={handleSwitchToLogin} >Sign In</BoldLink>
             </>
           ) : (
             <>

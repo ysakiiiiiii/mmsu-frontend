@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { SlSocialInstagram, SlSocialFacebook } from 'react-icons/sl';
 import { RiTwitterXFill } from 'react-icons/ri';
 import { LiaLinkedinIn } from 'react-icons/lia';
 import { CgProfile } from 'react-icons/cg';
 import { Link } from 'react-router-dom';
-import { AuthData } from '../../auth/AuthWrapper'; // adjust path if needed
+import { AuthData } from '../../auth/AuthWrapper';
 
 // Reusable social icon button
 const SocialButton = ({ Icon }) => (
@@ -16,7 +16,7 @@ const SocialButton = ({ Icon }) => (
 );
 
 const RenderHeader = () => {
-  const { user } = AuthData(); // get user info from context
+  const { user } = useContext(AuthData); // get user info from context
 
   return (
     <header className='flex justify-center font bg-green-900 mb-2'>
