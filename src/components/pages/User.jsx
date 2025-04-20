@@ -1,9 +1,9 @@
 import React from 'react'
-import { AuthData } from '../../auth/AuthWrapper';
+import { AuthContext } from '../../auth/AuthWrapper';
 
 export const Account = () => {
 
-  const { user } = AuthData();
+  const { user } = AuthContext();
 
   return (
        <div className="page">

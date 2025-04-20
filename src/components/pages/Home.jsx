@@ -1,12 +1,7 @@
-import React from 'react'
+import React from "react";
+import Hero from "../structure/Navbar/Hero";
 
 export const Home = () => {
-
-  return (
-       <div className="page">
-            <h2>Home page</h2>
-            <p>This is the text for the home page</p>
-       </div>
-  )
-}
-export default Home
+  return <Hero />;
+};
+export default Home;
