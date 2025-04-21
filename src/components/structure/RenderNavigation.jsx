@@ -38,7 +38,6 @@ export const RenderMenu = () => {
     navigate("/");
   };
   
-  console.log("User Info:", user);
 
   const MenuItem = ({ r }) => (
     <li>

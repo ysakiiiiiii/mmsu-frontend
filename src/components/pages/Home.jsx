@@ -1,6 +1,5 @@
 import React from "react";
-import Hero from "../structure/Navbar/Hero";
-
+import Hero from "../structure/Home/Hero";
 
 export const Home = () => {
   return <Hero />;
