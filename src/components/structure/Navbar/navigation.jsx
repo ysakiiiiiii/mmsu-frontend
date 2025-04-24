@@ -1,11 +1,11 @@
-import Home from "../pages/Home";
-import About from "../pages/About";
-import Login from "../pages/Login";
-import Store from "../pages/Store";
-import Cart from "../pages/Cart";
-import Favorites from "../pages/Favorites";
-import User from "../pages/User";
-import Admin from "../pages/Admin";
+import Home from "../../pages/Home";
+import About from "../../pages/About";
+import Login from "../../pages/Login";
+import Store from "../../pages/Store";
+import Cart from "../../pages/Cart";
+import Favorites from "../../pages/Favorites";
+import User from "../../pages/User";
+import Admin from "../../pages/Admin";
 
 export const nav = [
   {

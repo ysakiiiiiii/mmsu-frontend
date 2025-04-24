@@ -2,7 +2,7 @@ import React, { useContext, useReducer, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthWrapper";
-import { Marginer } from "../marginer";
+import { Marginer } from "../structure/Login/Marginer";
 import { motion } from "framer-motion";
 
 const BoxContainer = styled.div`
@@ -204,7 +204,7 @@ export function Login(props) {
           animate={isExpanded ? "expanded" : "collapsed"}
           variants={{
             expanded: {
-              width: "233%",
+              width: "250%",
               height: "1050px",
               borderRadius: "20%",
               transform: "rotate(60deg)",

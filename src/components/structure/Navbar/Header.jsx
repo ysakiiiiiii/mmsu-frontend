@@ -4,7 +4,7 @@ import { RiTwitterXFill } from 'react-icons/ri';
 import { LiaLinkedinIn } from 'react-icons/lia';
 import { CgProfile } from 'react-icons/cg';
 import { Link } from 'react-router-dom';
-import { AuthData } from '../../auth/AuthWrapper';
+import { AuthData } from '../../../auth/AuthWrapper';
 
 // Reusable social icon button
 const SocialButton = ({ Icon }) => (
