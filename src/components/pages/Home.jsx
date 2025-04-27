@@ -4,21 +4,19 @@ import ProductSlider from "../structure/Home/ProductSlider";
 import InfoCollection from "../structure/Home/InfoCollection";
 import ContactSection from "../structure/Home/Contact";
 import Footer from "../structure/Home/Footer";
-import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 import MMSUServices from "../structure/Home/Services";
 
 
 export const Home = () => {
   return (
     <>
-      <ErrorBoundary>
         <Hero />
         <MMSUServices/>
         <ProductSlider />
         <InfoCollection />
         <ContactSection />
         <Footer/>
-      </ErrorBoundary>
+
     </>
   );
 };

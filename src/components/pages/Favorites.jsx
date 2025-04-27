@@ -1,8 +1,12 @@
 import React from 'react'
+import ProtectedRouting from '../../auth/ProtectedRouting'
 
 const Favorites = () => {
   return (
-    <div>Favorites</div>
+    <ProtectedRouting>
+      <div>Favorites</div>
+
+    </ProtectedRouting>
   )
 }
 

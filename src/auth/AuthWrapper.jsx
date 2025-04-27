@@ -1,7 +1,9 @@
 import React, { createContext, useState } from "react";
 
+//This creates a context named AuthContext
 export const AuthContext = createContext();
 
+//Initialize a useState and the values of user
 export const AuthWrapper = ({ children }) => {
   const [user, setUser] = useState({
     name: "",
@@ -37,12 +39,13 @@ export const AuthWrapper = ({ children }) => {
 
   const logout = () => {
     setUser({ name: "", role: "guest", isAuthenticated: false });
-  };
+  };  
 
   const switchToSignup = () => setIsSignup(true);
   const switchToLogin = () => setIsSignup(false);
 
   return (
+    // This means that whatever component is wrapped with AuthContext will share this values: [user login ... isSignup]
     <AuthContext.Provider
       value={{
         user,
@@ -54,7 +57,8 @@ export const AuthWrapper = ({ children }) => {
         isSignup,
       }}
     >
-      {children}
+      {/* Whatever components wraps with AuthContext shares the value from the AuthContext */}
+      {children} 
     </AuthContext.Provider>
   );
 };

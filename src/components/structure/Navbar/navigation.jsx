@@ -6,6 +6,7 @@ import Cart from "../../pages/Cart";
 import Favorites from "../../pages/Favorites";
 import User from "../../pages/User";
 import Admin from "../../pages/Admin";
+import NotFound from "../../pages/NotFound";
 
 export const nav = [
   {
@@ -45,12 +46,21 @@ export const nav = [
   },
 
   {
-    path: "/admin",
+    path: "/admin/*",
     role: ["admin"],
     name: "Admin",
     element: <Admin />,
     isMenu: true,
     isPrivate: true,
+  },
+
+  {
+    path: "/404",
+    role: [""],
+    name: "",
+    element: <NotFound />,
+    isMenu: false,
+    isPrivate: false,
   },
 ];
 
