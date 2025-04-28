@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   CreditCard,
@@ -10,6 +10,7 @@ import {
   Menu,
   Moon,
   Sun,
+  LogOut,
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -22,20 +23,21 @@ const navItems = [
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [collapsed, setCollapsed] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [theme, setTheme] = useState("light");
 
   const toggleSidebar = () => {
-    setCollapsed(prev => {
+    setCollapsed((prev) => {
       localStorage.setItem("sidebar-collapsed", JSON.stringify(!prev));
       return !prev;
     });
   };
 
   const toggleTheme = () => {
-    setTheme(prev => {
+    setTheme((prev) => {
       const newTheme = prev === "light" ? "dark" : "light";
       localStorage.setItem("theme", newTheme);
       return newTheme;
@@ -44,6 +46,11 @@ export default function Sidebar() {
 
   const toggleMobileMenu = () => setMobileOpen(!mobileOpen);
 
+  const handleLogout = () => {
+    // Add your logout logic here
+    navigate("/login");
+  };
+
   useEffect(() => {
     const collapsedStored = localStorage.getItem("sidebar-collapsed");
     if (collapsedStored) setCollapsed(JSON.parse(collapsedStored));
@@ -51,15 +58,22 @@ export default function Sidebar() {
     if (themeStored) setTheme(themeStored);
   }, []);
 
-  const isCollapsed = collapsed && !hovered;
+  const isMobile = window.innerWidth < 768;
+  const isCollapsed = !mobileOpen && collapsed && !hovered;
   const sidebarWidth = isCollapsed ? 80 : 256;
 
   return (
     <div className={theme === "dark" ? "dark" : ""}>
-      {/* Mobile Hamburger */}
-      <div className="md:hidden fixed top-4 left-4 z-50">
-        <button onClick={toggleMobileMenu}>
-          <Menu size={28} />
+      {/* Mobile Topbar */}
+      <div className="md:hidden fixed top-0 left-0 right-0 flex items-center justify-between bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md z-50 px-4 py-3">
+        <div className="flex items-center gap-3">
+          <button onClick={toggleMobileMenu}>
+            <Menu size={28} className="text-teal-700" />
+          </button>
+          <span className="text-lg font-bold text-teal-700">MMSUmerch</span>
+        </div>
+        <button onClick={toggleTheme}>
+          {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
         </button>
       </div>
 
@@ -70,15 +84,15 @@ export default function Sidebar() {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className={`bg-white/60 dark:bg-gray-900/50 backdrop-blur-md h-full shadow-xl fixed top-0 left-0 z-40 
-          ${mobileOpen ? "translate-x-0" : "-translate-x-full"} 
+        className={`bg-white/60 dark:bg-gray-900/60 backdrop-blur-md h-full shadow-xl fixed top-0 left-0 z-40 pt-20
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 transition-transform duration-300 overflow-hidden`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 mt-20">
+        {/* Desktop Header */}
+        <div className="hidden md:flex items-center justify-between p-6">
           {!isCollapsed && (
-            <div className="text-xl font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">
-              MMSU MERCH
+            <div className="text-xl font-bold text-teal-700 dark:text-teal-400 whitespace-nowrap">
+              MMSUmerch
             </div>
           )}
           <div className="flex items-center gap-2">
@@ -89,22 +103,21 @@ export default function Sidebar() {
               {collapsed ? <ChevronRight /> : <ChevronLeft />}
             </button>
           </div>
-          {/* Close button for mobile */}
-          <button onClick={toggleMobileMenu} className="md:hidden">
-            ✖
-          </button>
         </div>
 
-        {/* Nav */}
-        <nav className="mt-6 flex flex-col gap-1 relative">
-          {/* Active Link Indicator */}
+        {/* Nav Items */}
+        <nav className="mt-4 flex flex-col gap-1 relative">
+          {/* Active Link indicator */}
           <motion.div
             layout
-            className="absolute left-0 w-1 bg-indigo-500 rounded-full"
+            className="absolute left-1 w-1 bg-teal-500 rounded-full z-100"
             style={{
-              top: navItems.findIndex(
-                item => `/admin/${item.path}` === location.pathname
-              ) * 56 + 24, // 56px per item (padding + height), 24px offset
+              top:
+                navItems.findIndex(
+                  (item) => `/admin/${item.path}` === location.pathname
+                ) *
+                  48 +
+                3,
               height: 40,
             }}
             transition={{ duration: 0.3 }}
@@ -121,31 +134,31 @@ export default function Sidebar() {
                 onClick={() => setMobileOpen(false)}
                 className={`group relative flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
                   isActive
-                    ? "bg-indigo-100 dark:bg-indigo-800 text-indigo-700 dark:text-white shadow-md"
-                    : "text-gray-600 dark:text-gray-300 hover:bg-indigo-50 dark:hover:bg-gray-700"
+                    ? "bg-teal-100 dark:bg-teal-800 text-teal-700 dark:text-white shadow-md"
+                    : "text-gray-600 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700"
                 }`}
               >
                 <Icon className="w-5 h-5" />
-
                 {!isCollapsed && <span>{label}</span>}
-
-                {isCollapsed && (
-                  <motion.span
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.1 }}
-                    className="absolute left-full top-1/2 -translate-y-1/2 ml-3 bg-gray-800 dark:bg-gray-600 text-white text-xs px-2 py-1 rounded shadow-md whitespace-nowrap pointer-events-none group-hover:opacity-100"
-                  >
-                    {label}
-                  </motion.span>
-                )}
               </Link>
             );
           })}
+
+          {/* Logout Button */}
+          <div className="mb-6 px-6">
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="flex items-center gap-3 w-full text-sm font-medium text-red-600 hover:text-red-700 dark:hover:text-red-400 transition-all"
+            >
+              <LogOut className="w-5 h-5" />
+              {!isCollapsed && <span>Log out</span>}
+            </button>
+          </div>
         </nav>
       </motion.aside>
 
-      {/* Overlay for mobile */}
+      {/* Mobile overlay */}
       {mobileOpen && (
         <div
           onClick={toggleMobileMenu}

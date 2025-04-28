@@ -20,6 +20,10 @@ export const RenderMenu = () => {
   const userRole = user.isAuthenticated ? user.role : "guest";
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  if (userRole === "admin") {
+    return null;
+  } 
+
   const handleLogout = () => {
     logout(); 
     navigate("/");
