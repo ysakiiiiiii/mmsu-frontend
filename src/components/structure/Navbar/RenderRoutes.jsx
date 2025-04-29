@@ -10,10 +10,13 @@ export const RenderRoutes = () => {
 
   return (
     <Routes>
+
       {nav.map((r, i) =>
-        r.role.includes(userRole) ? (
+        // r.role.includes(userRole) ?
+        
+        (
           <Route key={i} path={r.path} element={r.element} />
-        ) : null
+        )
       )}
 
       {button.map((item) => (

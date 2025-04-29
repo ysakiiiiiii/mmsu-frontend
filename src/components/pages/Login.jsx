@@ -2,7 +2,6 @@ import React, { useContext, useReducer, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthWrapper";
-import { Marginer } from "../structure/Login/Marginer";
 import { motion } from "framer-motion";
 
 const BoxContainer = styled.div`
@@ -21,7 +20,7 @@ export const FormContainer = styled.form`
   width: 100%;
   display: flex;
   flex-direction: column;
-  z-index: 5; 
+  z-index: 5;
 `;
 
 const TopContainer = styled.div`
@@ -142,8 +141,8 @@ const MutedLink = styled.a`
   border-bottom: 1px dashed rgba(200, 200, 200, 0.8);
 `;
 
-export function Login(props) {
-
+export function Login() {
+  //Deconstructs the value from the AuthContext
   const { login, signup, switchToSignup, switchToLogin, isSignup } =
     useContext(AuthContext);
 
@@ -160,7 +159,7 @@ export function Login(props) {
   const doLogin = async () => {
     try {
       await login(formData.userName, formData.password);
-      navigate("/store");
+      formData.userName === "admin" ? navigate("/admin") : navigate("/");
     } catch (error) {
       setErrorMessage(error);
     }
@@ -169,7 +168,7 @@ export function Login(props) {
   const doSignup = async () => {
     try {
       await signup(formData.userName, formData.password);
-      navigate("/store");
+      navigate("/");
     } catch (error) {
       setErrorMessage(error);
     }
@@ -228,7 +227,6 @@ export function Login(props) {
         </HeaderContainer>
       </TopContainer>
       <InnerContainer>
-        
         <FormContainer>
           {isSignup && (
             <Input
@@ -245,7 +243,6 @@ export function Login(props) {
             value={formData.userName || ""}
             onChange={(e) => setFormData({ userName: e.target.value })}
           />
-          
 
           <Input
             type="password"
@@ -263,21 +260,29 @@ export function Login(props) {
             />
           )}
 
-        {errorMessage && <div className="error text-xs text-red-500 italic">{errorMessage}</div>}
-
+          {errorMessage && (
+            <div className="error text-xs text-red-500 italic">
+              {errorMessage}
+            </div>
+          )}
         </FormContainer>
-        <Marginer direction="vertical" margin={10} />
-        <MutedLink href="#">Forget your password?</MutedLink>
-        <Marginer direction="vertical" margin="1.6em" />
-        <SubmitButton type="submit" onClick={isSignup ? doSignup : doLogin}>
+        <div className="py-3">
+          <MutedLink href="#">Forget your password?</MutedLink>
+        </div>
+
+        <SubmitButton
+          type="submit"
+          className="py-20"
+          onClick={isSignup ? doSignup : doLogin}
+        >
           {isSignup ? "Sign Up" : "Sign In"}
         </SubmitButton>
-        <Marginer className="m-2" />
-        <LineText className="cursor-pointer">
+
+        <LineText className="cursor-pointer pt-3">
           {isSignup ? (
             <>
               Already have an account?{" "}
-              <BoldLink onClick={handleSwitchToLogin} >Sign In</BoldLink>
+              <BoldLink onClick={handleSwitchToLogin}>Sign In</BoldLink>
             </>
           ) : (
             <>

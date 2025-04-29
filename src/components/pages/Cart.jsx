@@ -1,8 +1,12 @@
 import React from 'react'
+import ProtectedRouting from '../../auth/ProtectedRouting'
+
 
 const Cart = () => {
   return (
-    <div>Cart</div>
+    <ProtectedRouting>
+      <div>Cart</div>
+    </ProtectedRouting>
   )
 }
 
