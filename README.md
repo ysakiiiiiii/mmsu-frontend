@@ -10,16 +10,18 @@ Welcome to the official repository for **MMSU Merchandise** — your one-stop sh
 
 This project is currently a work in progress.  
 ✅ **Navbar with Protected Routing** is already completed.  
+✅ 🏠 **Home Page** – Create landing content for visitors  
+✅ 🔐 **Login Page** – Create login form and authentication flow  
+✅ 📜 **Footer** – Include contact details, social media, etc.  
+
+
 🛠️ The following sections are **still under development**:
 
 ### 🔧 To-Do List for Collaborators
-
 - 📄 **About Page** – Add info about MMSU and merchandise  
-- 📜 **Footer** – Include contact details, social media, etc.  
-- 🔐 **Login Page** – Create login form and authentication flow  
 - 🛠️ **Admin Page** – For managing products/orders  
 - 🏪 **Store Page** – Display available merchandise  
-- 🏠 **Home Page** – Create landing content for visitors  
+
 
 Please coordinate tasks and branch names for smoother collaboration.
 
