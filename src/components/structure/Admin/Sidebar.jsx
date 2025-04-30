@@ -67,12 +67,12 @@ export default function Sidebar() {
       {/* Mobile Topbar */}
       <div className="md:hidden fixed top-0 left-0 right-0 flex items-center justify-between bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-md z-50 px-4 py-3">
         <div className="flex items-center gap-3">
-          <button onClick={toggleMobileMenu}>
+          <button type="button" onClick={toggleMobileMenu}>
             <Menu size={28} className="text-teal-700" />
           </button>
           <span className="text-lg font-bold text-teal-700">MMSUmerch</span>
         </div>
-        <button onClick={toggleTheme}>
+        <button type="button" onClick={toggleTheme}>
           {theme === "light" ? <Moon size={24} /> : <Sun size={24} />}
         </button>
       </div>
@@ -96,10 +96,10 @@ export default function Sidebar() {
             </div>
           )}
           <div className="flex items-center gap-2">
-            <button onClick={toggleTheme}>
+            <button type="button" onClick={toggleTheme}>
               {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
             </button>
-            <button onClick={toggleSidebar} className="hidden md:block">
+            <button type="button" onClick={toggleSidebar} className="hidden md:block">
               {collapsed ? <ChevronRight /> : <ChevronLeft />}
             </button>
           </div>
