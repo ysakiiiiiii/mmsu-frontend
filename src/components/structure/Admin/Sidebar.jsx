@@ -144,7 +144,7 @@ export default function Sidebar() {
             );
           })}
 
-          {/* Logout Button */}
+          {/* Logout Button * /}
           <div className="mb-6 px-6">
             <button
               type="button"

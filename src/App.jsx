@@ -1,7 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import { AuthWrapper } from "./auth/AuthWrapper";
 import { RenderMenu } from "./components/structure/Navbar/RenderMenu";
-import {RenderRoutes} from "./components/structure/Navbar/RenderRoutes";
+import { RenderRoutes } from "./components/structure/Navbar/RenderRoutes";
 
 function App() {
   return (
