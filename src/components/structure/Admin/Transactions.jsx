@@ -15,7 +15,7 @@ export default function Transactions() {
   };
 
   return (
-    <div>
+    <div className="mt-17 md:mt-0">
       <h2 className="text-xl font-semibold mb-4">Order Transactions</h2>
       <div className="bg-white p-4 rounded shadow">
         <table className="w-full text-left">

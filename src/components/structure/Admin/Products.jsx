@@ -27,7 +27,7 @@ export default function Products() {
   };
 
   return (
-    <div>
+    <div className="mt-17 md:mt-0">
       <h2 className="text-xl font-semibold mb-4">Manage Products</h2>
       <button onClick={addProduct} className="mb-4 px-4 py-2 bg-indigo-600 text-white rounded">
         Add Product
