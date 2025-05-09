@@ -1,24 +1,24 @@
 import React from "react";
 
 const ProfileStatsSection = () => (
-  <section className="bg-white p-6 shadow rounded-xl">
-    <h2 className="text-xl font-bold mb-4">Profile Stats</h2>
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div>
-        <p className="font-bold text-lg">$1230</p>
-        <p className="text-sm text-gray-500">Total Spent</p>
+  <section className="bg-white p-3 shadow rounded-lg">
+    <h2 className="text-base font-bold mb-2">Profile Stats</h2>
+    <div className="grid grid-cols-2 gap-2">
+      <div className="p-2 border rounded">
+        <p className="font-bold text-sm">$1230</p>
+        <p className="text-xs text-gray-500">Total Spent</p>
       </div>
-      <div>
-        <p className="font-bold text-lg">46</p>
-        <p className="text-sm text-gray-500">Products Bought</p>
+      <div className="p-2 border rounded">
+        <p className="font-bold text-sm">46</p>
+        <p className="text-xs text-gray-500">Products</p>
       </div>
-      <div>
-        <p className="font-bold text-lg">$27</p>
-        <p className="text-sm text-gray-500">Avg Order Value</p>
+      <div className="p-2 border rounded">
+        <p className="font-bold text-sm">$27</p>
+        <p className="text-xs text-gray-500">Avg Order</p>
       </div>
-      <div>
-        <p className="font-bold text-lg">Shoes</p>
-        <p className="text-sm text-gray-500">Top Category</p>
+      <div className="p-2 border rounded">
+        <p className="font-bold text-sm">Shoes</p>
+        <p className="text-xs text-gray-500">Top Category</p>
       </div>
     </div>
   </section>
