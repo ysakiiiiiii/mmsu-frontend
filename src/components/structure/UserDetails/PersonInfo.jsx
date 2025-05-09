@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Profile from "./user-image/profile.jpeg";
+import { AuthContext } from "../../../auth/AuthWrapper";
 
 const PersonalInfoSection = () => {
+  const { user } = useContext(AuthContext);
   const [isEditing, setIsEditing] = useState(false);
-  const [user, setUser] = useState({
-    name: "Lucky",
-    email: "lucky_asp@example.com",
-  });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +49,9 @@ const PersonalInfoSection = () => {
         ) : (
           <div className="mt-2 sm:mt-4">
             <h2 className="text-sm sm:text-lg font-semibold">{user.name}</h2>
-            <p className="text-xs sm:text-sm text-gray-500 truncate">{user.email}</p>
+            <p className="text-xs sm:text-sm text-gray-500 truncate">
+              {user.email}
+            </p>
           </div>
         )}
 
