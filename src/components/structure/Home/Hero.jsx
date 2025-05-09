@@ -31,7 +31,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7 }}
         >
-          <h1 className="text-5xl md:text-6xl lg:text-7xl text-gray-900 leading-tight font-Bebas">
+          <h1 className="text-3xl md:text-6xl lg:text-7xl text-gray-900 leading-tight font-Bebas">
             LET'S GO!
             <br />
             <span className="text-green-800"> STAMPEDE </span>
@@ -40,7 +40,7 @@ export default function HeroSection() {
             <br />
             ALL THE WAY TO TOP
           </h1>
-          <p className="text-gray-500 font-Montserrat-Light">
+          <p className="text-gray-500 font-Montserrat-Light text-xs">
             Celebrate the legacy of Mariano Marcos State University with
             high-quality apparel and essentials. Perfect for students, alumni,
             and true MMSU supporters.

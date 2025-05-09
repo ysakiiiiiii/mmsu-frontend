@@ -1,4 +1,4 @@
-// components/RenderMenu.jsx
+// components/RenderMenu.jsx (updated version)
 import { useState, useContext } from "react";
 import { PiHorseLight } from "react-icons/pi";
 import { GoHeart } from "react-icons/go";
@@ -29,18 +29,18 @@ export const RenderMenu = () => {
   };
 
   return (
-    <nav className="bg-white px-6 py-4 shadow-sm sticky top-0 z-[9999]">
+    <nav className="bg-white px-4 py-3 shadow-sm sticky top-0 z-[9999]">
       <div className="flex justify-between items-center w-full">
-        {/* Logo Section */}
-        <div className="flex items-center gap-3">
-          <PiHorseLight className="text-green-900 text-4xl" />
+        {/* Logo Section - Adjusted for mobile */}
+        <div className="flex items-center gap-2">
+          <PiHorseLight className="text-green-900 text-2xl sm:text-3xl" />
           <div className="flex flex-col leading-tight font-Lena">
-            <div className="flex text-2xl font-bold">
+            <div className="flex text-xl sm:text-2xl font-bold">
               <p className="hover:text-yellow-500 transition">MMSU</p>
               <p className="text-green-800">merch</p>
             </div>
             {user.isAuthenticated && user.role === "private" && (
-              <p className="absolute top-10 mt-1 text-xs text-black font-normal font-Poppins">
+              <p className="absolute top-9 mt-1 text-xs text-black font-normal font-Poppins">
                 Hello, <span className="font-semibold">{user.name}</span>! 🎉
               </p>
             )}
@@ -48,7 +48,7 @@ export const RenderMenu = () => {
         </div>
 
         {/* Desktop Menu Render Links*/}
-        <ul className="hidden md:flex gap-12 font-Poppins text-sm">
+        <ul className="hidden md:flex gap-8 font-Poppins text-sm">
           {userRole !== "admin" &&
             nav.map(
               (r, i) =>
@@ -57,13 +57,28 @@ export const RenderMenu = () => {
             )}
         </ul>
 
-        {/* Right Section */}
-        <div className="flex items-center gap-4">
+        {/* Right Section - Adjusted icon sizes */}
+        <div className="flex items-center gap-3 sm:gap-4">
           {userRole === "private" && (
-            <div className="flex gap-4">
-              <IconButton icon={BsPerson} to="/user" tooltip="View Profile" />
-              <IconButton icon={GoHeart} to="/favorites" tooltip="Favorites" />
-              <IconButton icon={GiShoppingCart} to="/cart" tooltip="Cart" />
+            <div className="flex gap-2 sm:gap-4">
+              <IconButton 
+                icon={BsPerson} 
+                to="/user" 
+                tooltip="View Profile"
+                iconSize="text-lg sm:text-xl"
+              />
+              <IconButton 
+                icon={GoHeart} 
+                to="/favorites" 
+                tooltip="Favorites"
+                iconSize="text-lg sm:text-xl"
+              />
+              <IconButton 
+                icon={GiShoppingCart} 
+                to="/cart" 
+                tooltip="Cart"
+                iconSize="text-lg sm:text-xl"
+              />
             </div>
           )}
 
@@ -71,23 +86,23 @@ export const RenderMenu = () => {
             <button
               type="button"
               onClick={handleLogout}
-              className="text-green-800 hover:text-red-600 text-sm font-semibold font-Poppins hidden md:block"
+              className="text-green-800 hover:text-red-600 text-xs sm:text-sm font-semibold font-Poppins hidden md:block"
             >
               Log out
             </button>
           ) : (
             <Link
               to="/login"
-              className="text-green-800 hover:text-green-600 text-sm font-semibold font-Poppins"
+              className="text-green-800 hover:text-green-600 text-xs sm:text-sm font-semibold font-Poppins"
             >
               Log in
             </Link>
           )}
 
-          {/* Mobile Toggle */}
+          {/* Mobile Toggle - Adjusted size */}
           <button
             type="button"
-            className="md:hidden text-2xl"
+            className="md:hidden text-xl"
             onClick={() => setMobileMenuOpen(!isMobileMenuOpen)}
           >
             <RxHamburgerMenu />
