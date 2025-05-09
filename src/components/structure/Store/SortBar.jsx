@@ -1,3 +1,4 @@
+// structure/Store/SortBar.jsx
 import React from 'react';
 
 const SortBar = ({ sortOption, setSortOption }) => {
