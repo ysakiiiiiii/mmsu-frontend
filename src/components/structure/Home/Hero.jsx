@@ -1,9 +1,13 @@
 import { motion } from "framer-motion";
-import HeroImage from "../../../../public/hero-image/hero-nobg.png";
+import HeroImage from "./hero-image/hero-nobg.png";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../auth/AuthWrapper";
+import { useContext } from "react";
 
-const Button = ({ children, className }) => (
+const Button = ({ children, className, onClick }) => (
   <button
     type="button"
+    onClick={onClick}
     className={`px-6 py-3 rounded-md font-medium shadow-md transition duration-300 ${className}`}
   >
     {children}
@@ -11,6 +15,12 @@ const Button = ({ children, className }) => (
 );
 
 export default function HeroSection() {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  const handleGetStarted = () => {
+    navigate(user?.isAuthenticated ? "/about" : "/login");
+  };
+
   return (
     <div className="relative bg-white py-30 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] max-h-none">
       <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between relative z-10">
@@ -22,17 +32,23 @@ export default function HeroSection() {
           transition={{ duration: 0.7 }}
         >
           <h1 className="text-5xl md:text-6xl lg:text-7xl text-gray-900 leading-tight font-Bebas">
-            LET'S GO!<br/>
+            LET'S GO!
+            <br />
             <span className="text-green-800"> STAMPEDE </span>
-            YOUR 
-            <span className="text-yellow-500"> FASHION </span><br />
+            YOUR
+            <span className="text-yellow-500"> FASHION </span>
+            <br />
             ALL THE WAY TO TOP
           </h1>
           <p className="text-gray-500 font-Montserrat-Light">
-          Celebrate the legacy of Mariano Marcos State University with high-quality apparel 
-          and essentials. Perfect for students, alumni, and true MMSU supporters.
+            Celebrate the legacy of Mariano Marcos State University with
+            high-quality apparel and essentials. Perfect for students, alumni,
+            and true MMSU supporters.
           </p>
-          <Button className="font-Poppins text-xs md:text-[15px]  bg-green-600 text-white hover:bg-green-900">
+          <Button
+            onClick={handleGetStarted}
+            className="font-Poppins text-xs md:text-[15px] bg-green-600 text-white hover:bg-green-900"
+          >
             Get Started
           </Button>
 

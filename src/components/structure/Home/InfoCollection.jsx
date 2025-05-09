@@ -1,14 +1,14 @@
 import React from "react";
 import { Truck, Percent, ShieldCheck, Headphones } from "lucide-react";
-import ModelImg from "../../../../public/hero-image/hero.jpg";
-import Model1 from "../../../../public/hero-image/model1_copy.jpg";
-import Model2 from "../../../../public/hero-image/model2.jpg";
-import Model3 from "../../../../public/hero-image/model3.jpg";
-import Model4 from "../../../../public/hero-image/model4.jpg";
-import Model5 from "../../../../public/hero-image/model5.jpg";
-import Model6 from "../../../../public/hero-image/model6.jpg";
-import Model7 from "../../../../public/hero-image/model7.jpg";
-import Model8 from "../../../../public/hero-image/model8.jpg";
+import ModelImg from "./hero-image/hero.jpg";
+import Model1 from "./hero-image/model1_copy.jpg";
+import Model2 from "./hero-image/model2.jpg";
+import Model3 from "./hero-image/model3.jpg";
+import Model4 from "./hero-image/model4.jpg";
+import Model5 from "./hero-image/model5.jpg";
+import Model6 from "./hero-image/model6.jpg";
+import Model7 from "./hero-image/model7.jpg";
+import Model8 from "./hero-image/model8.jpg";
 import { motion } from "framer-motion";
 
 const FashionCollection = () => {

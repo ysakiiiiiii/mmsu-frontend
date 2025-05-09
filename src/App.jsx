@@ -12,7 +12,7 @@ function App() {
         msOverflowStyle: "none",
       }}
     >
-      <div style={{ height: "200vh" }}>
+      <div >
         <BrowserRouter>
           <AuthWrapper>
             <RenderMenu />

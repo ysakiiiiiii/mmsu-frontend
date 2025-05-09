@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import { AuthContext } from "../../../auth/AuthWrapper";
-import Jacket from "../../../../public/product-image/jacket.png";
-import Cap from "../../../../public/product-image/cap2.png";
-import Tshirt from "../../../../public/product-image/tshirt.png";
-import ToteBag from "../../../../public/product-image/tote.png";
-import Tumbler from "../../../../public/product-image/tumblers.png";
+import Jacket from "/product-image/jacket.png";
+import Cap from "/product-image/cap2.png";
+import Tshirt from "/product-image/tshirt.png";
+import ToteBag from "/product-image/tote.png";
+import Tumbler from "/product-image/tumblers.png";
 import { motion } from "framer-motion";
 
 const HeroSlide = [
@@ -111,7 +111,7 @@ const Hero = () => {
         transition={{ duration: 0.8, ease: "easeOut" }}
         viewport={{ once: true, amount: 0.6 }}
       >
-        <div className="overflow-hidden rounded-3xl hero-bg-color flex justify-center items-center pb-6 sm:py-16">
+        <div className="rounded-3xl hero-bg-color flex justify-center items-center pb-6 sm:py-16">
           <div className="container">
             <Slider {...settings}>
               {HeroSlide.map((item) => (

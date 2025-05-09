@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Profile from "../../../../public/user-image/profile.jpeg";
+import Profile from "./user-image/profile.jpeg";
 
 const PersonalInfoSection = () => {
   const [isEditing, setIsEditing] = useState(false);
@@ -71,7 +71,10 @@ const PersonalInfoSection = () => {
           </div>
 
           <div className="mt-4 flex justify-center gap-4">
-            <button type="button" className="px-4 py-2 bg-blue-500 text-white rounded-md">
+            <button
+              type="button"
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
               Change Profile Picture
             </button>
             <button

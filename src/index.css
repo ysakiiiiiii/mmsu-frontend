@@ -1,72 +1,81 @@
 @import "tailwindcss";
 
 @font-face {
-  font-family: "Poppins";
-  src: url("../public/fonts/Poppins-Regular.ttf");
+  font-family: 'Poppins';
+  src: url('/fonts/Poppins-Regular/Poppins-Regular.eot');
+  src: url('/fonts/Poppins-Regular/Poppins-Regular.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/Poppins-Regular/Poppins-Regular.woff2') format('woff2'),
+      url('/fonts/Poppins-Regular/Poppins-Regular.woff') format('woff'),
+      url('/fonts/Poppins-Regular/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "Lena";
-  src: url("../public/fonts/Lena.ttf");
+  font-family: 'Bebas Neue';
+  src: url('/fonts/BebasNeue-Regular/BebasNeue-Regular.eot');
+  src: url('/fonts/BebasNeue-Regular/BebasNeue-Regular.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/BebasNeue-Regular/BebasNeue-Regular.woff2') format('woff2'),
+      url('/fonts/BebasNeue-Regular/BebasNeue-Regular.woff') format('woff'),
+      url('/fonts/BebasNeue-Regular/BebasNeue-Regular.ttf') format('truetype'),
+      url('/fonts/BebasNeue-Regular/BebasNeue-Regular.svg#BebasNeue-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "LibreBaskerville";
-  src: url("../public/fonts/LibreBaskerville-Regular.ttf");
+  font-family: 'Lena';
+  src: url('/fonts/Lena/Lena.eot');
+  src: url('/fonts/Lena/Lena.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/Lena/Lena.woff2') format('woff2'),
+      url('/fonts/Lena/Lena.woff') format('woff'),
+      url('/fonts/Lena/Lena.ttf') format('truetype'),
+      url('/fonts/Lena/Lena.svg#Lena') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "CaviarDreams";
-  src: url("../public/fonts/CaviarDreams.ttf");
+  font-family: 'Libre Baskerville';
+  src: url('/fonts/LibreBaskerville-Regular/LibreBaskerville-Regular.eot');
+  src: url('/fonts/LibreBaskerville-Regular/LibreBaskerville-Regular.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/LibreBaskerville-Regular/LibreBaskerville-Regular.woff2') format('woff2'),
+      url('/fonts/LibreBaskerville-Regular/LibreBaskerville-Regular.woff') format('woff'),
+      url('/fonts/LibreBaskerville-Regular/LibreBaskerville-Regular.ttf') format('truetype'),
+      url('/fonts/LibreBaskerville-Regular/LibreBaskerville-Regular.svg#LibreBaskerville-Regular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
-  font-family: "Ameda";
-  src: url("../public/fonts/Ameda.otf");
+  font-family: 'Montserrat';
+  src: url('/fonts/Montserrat-Light/Montserrat-Light.eot');
+  src: url('/fonts/Montserrat-Light/Montserrat-Light.eot?#iefix') format('embedded-opentype'),
+      url('/fonts/Montserrat-Light/Montserrat-Light.woff2') format('woff2'),
+      url('/fonts/Montserrat-Light/Montserrat-Light.woff') format('woff'),
+      url('/fonts/Montserrat-Light/Montserrat-Light.ttf') format('truetype'),
+      url('/fonts/Montserrat-Light/Montserrat-Light.svg#Montserrat-Light') format('svg');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
 }
 
-@font-face {
-  font-family: "Micksenav";
-  src: url("../public/fonts/Micksenav.otf");
-}
-
-@font-face {
-  font-family: "Antraste";
-  src: url("../public/fonts/Antraste.otf");
-}
-
-@font-face {
-  font-family: "Montserrat-Light";
-  src: url("../public/fonts/Montserrat-Light.otf");
-}
-
-@font-face {
-  font-family: "Montserrat-SemiBold";
-  src: url("../public/fonts/Montserrat-SemiBold.woff");
-}
-
-@font-face {
-  font-family: "Bebas";
-  src: url("../public/fonts/Bebas.ttf");
+@theme {
+  --font-Poppins: Poppins, "sans-serif";
+  --font-LibreBaskerville: Libre Baskerville;
+  --font-Lena: Lena;
+  --font-Montserrat-Light: Montserrat;
+  --font-Bebas: Bebas Neue;
 }
 
 :root {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-@theme {
-  --font-Poppins: Poppins, "sans-seriff";
-  --font-LibreBaskerville: LibreBaskerville, "sans-serif";
-  --font-Lena: Lena, "sans-serif";
-  --font-CaviarDreams: CaviarDreams;
-  --font-Ameda: Ameda;
-  --font-Micksenav: Micksenav;
-  --font-Antraste: Antraste;
-  --font-Montserrat-Light: Montserrat-Light;
-  --font-Montserrat-SemiBold: Montserrat-SemiBold;
-  --font-Bebas: Bebas;
 }
 
 @layer components {
@@ -81,43 +90,54 @@
   .input {
     @apply mt-1 w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500;
   }
-  
-
 }
 
-@utility container {
-  margin: auto;
-  padding: 1rem 3rem 1rem; 
-}
+@layer utilities {
+  .container {
+    margin: auto;
+    padding: 1rem 3rem 1rem;
+  }
 
-@utility non-container {
-  margin: auto;
-}
-
-@theme {
-  --animate-fade-in: fade-in0.3s ease-out;
-  @keyframes fade-in {
-    0% {
-      opacity: 0;
-    }
-    100% {
-      opacity: 1;
-
-    }
+  .non-container {
+    margin: auto;
   }
 }
 
-html, body {
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+html,
+body {
   height: 100%;
-  overflow: hidden; 
-  scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE and Edge */
+  overflow: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
 }
 
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
-  display: none;                /* Chrome, Safari, Opera */
+  display: none; /* Chrome, Safari, Opera */
 }
 
 
+.perspective-1000 {
+  perspective: 1000px;
+}
 
+.transform-style-preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+.flipped .backface-visibility-hidden {
+  backface-visibility: hidden;
+}

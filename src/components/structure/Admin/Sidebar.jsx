@@ -92,7 +92,7 @@ export default function Sidebar({ children }) {
           >
             <Menu size={28} className="text-teal-700 dark:text-teal-400" />
           </button>
-          <span className="text-lg font-bold text-teal-700 dark:text-teal-400">
+          <span className="text-lg font-bold text-green-800 dark:text-teal-400 font-Lena">
             MMSUmerch
           </span>
         </div>

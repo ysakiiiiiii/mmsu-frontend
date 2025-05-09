@@ -10,9 +10,8 @@ import { useNavigate, Link } from "react-router-dom";
 import IconButton from "./IconButtons";
 import MenuItem from "./MenuItem";
 import MobileMenu from "./MobileMenu";
-import {nav} from "./navigation";
+import { nav } from "./navigation";
 import { AnimatePresence } from "framer-motion";
-
 
 export const RenderMenu = () => {
   const { user, logout } = useContext(AuthContext);
@@ -22,16 +21,15 @@ export const RenderMenu = () => {
 
   if (userRole === "admin") {
     return null;
-  } 
+  }
 
   const handleLogout = () => {
-    logout(); 
+    logout();
     navigate("/");
   };
-  
 
   return (
-    <nav className="bg-white px-6 py-4 shadow-sm sticky top-0 z-50">
+    <nav className="bg-white px-6 py-4 shadow-sm sticky top-0 z-[9999]">
       <div className="flex justify-between items-center w-full">
         {/* Logo Section */}
         <div className="flex items-center gap-3">
@@ -51,7 +49,12 @@ export const RenderMenu = () => {
 
         {/* Desktop Menu Render Links*/}
         <ul className="hidden md:flex gap-12 font-Poppins text-sm">
-          {userRole !== "admin" && nav.map((r, i) => r.isMenu && r.role.includes(userRole) && <MenuItem key={i} r={r} />)}
+          {userRole !== "admin" &&
+            nav.map(
+              (r, i) =>
+                r.isMenu &&
+                r.role.includes(userRole) && <MenuItem key={i} r={r} />
+            )}
         </ul>
 
         {/* Right Section */}
