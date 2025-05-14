@@ -25,11 +25,11 @@ const AboutHero = () => {
   };
 
   return (
-    <section className="relative py-20 px-4 text-center max-w-6xl mx-auto mt-10 md:mt-22 overflow-hidden">
+    <section className="relative py-10 sm:py-20 px-4 text-center max-w-6xl mx-auto mt-5 md:mt-22 overflow-hidden">
 
       {/* Content container with relative positioning */}
       <div className="relative z-10">
-        <h1 className="text-5xl sm:text-6xl lg:text-7xl mb-8 font-Bebas">
+        <h1 className="text-4xl sm:text-6xl lg:text-7xl mb-8 font-Bebas">
           <span className="text-green-600">STAMPEDE</span> YOUR{" "}
           <span className="text-yellow-500">FASHION</span>
           <br /> ALL THE WAY TO THE TOP

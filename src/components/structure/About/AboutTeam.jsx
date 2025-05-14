@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaLinkedin, FaTwitter } from "react-icons/fa";
 import Lucky from "./school/lucky.jpg";
 import Lin from "./school/lin.jpg";
@@ -26,10 +26,21 @@ const team = [
 ];
 
 const TeamCard = ({ member }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const handleClick = () => {
+    setIsFlipped(!isFlipped);
+  };
+
   return (
-    <div className="relative w-full h-full group perspective-1000">
+    <div 
+      className="relative w-full h-full perspective-1000"
+      onClick={handleClick}
+    >
       {/* Card Container */}
-      <div className="relative w-full h-full transition-transform duration-500 transform-style-preserve-3d group-hover:rotate-y-180">
+      <div className={`relative w-full h-full transition-transform duration-500 transform-style-preserve-3d ${
+        isFlipped ? 'rotate-y-180' : ''
+      } group-hover:rotate-y-180`}>
         {/* Front of Card */}
         <div className="absolute inset-0 backface-hidden bg-white rounded-xl overflow-hidden shadow-lg">
           <img
@@ -77,7 +88,7 @@ const AboutTeam = () => {
 
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 relative">
         {team.map((member, index) => (
-          <div key={index} className="h-96">
+          <div key={index} className="h-96 group">
             <TeamCard member={member} />
           </div>
         ))}
@@ -92,6 +103,9 @@ const AboutTeam = () => {
         }
         .backface-hidden {
           backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+          transform: rotateY(180deg);
         }
       `}</style>
     </section>

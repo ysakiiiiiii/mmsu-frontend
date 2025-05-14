@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { FiHeart, FiShoppingCart, FiChevronLeft } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useStore } from "../../../context/StoreContext"
+import { useStore } from "../../../context/StoreContext";
+import { AuthContext } from '../../../auth/AuthWrapper';
 
 const ProductDetail = ({ products }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const { cart, favorites, addToCart, toggleFavorite } = useStore();
+  const { user } = useContext(AuthContext);
 
   const product = products.find(p => p.id === parseInt(id));
   const isFavorite = favorites.some(item => item.id === product?.id);
@@ -23,8 +25,28 @@ const ProductDetail = ({ products }) => {
     }
   };
 
+  const requireAuth = (action) => {
+    if (!user.isAuthenticated) {
+      navigate('/login', { state: { from: `/store/product/${id}` } });
+      return false;
+    }
+    return true;
+  };
+
   const handleAddToCartClick = () => {
+    if (!requireAuth('add to cart')) return;
     addToCart(product, quantity);
+  };
+
+  const handleToggleFavorite = () => {
+    if (!requireAuth('save favorites')) return;
+    toggleFavorite(product);
+  };
+
+  const handleBuyNow = () => {
+    if (!requireAuth('purchase items')) return;
+    addToCart(product, quantity);
+    navigate('/checkout');
   };
 
   return (
@@ -60,7 +82,7 @@ const ProductDetail = ({ products }) => {
             </div>
             <button 
               className={`p-2 ${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 transition-colors`}
-              onClick={() => toggleFavorite(product)}
+              onClick={handleToggleFavorite}
             >
               <FiHeart className="w-5 h-5" />
             </button>
@@ -105,10 +127,6 @@ const ProductDetail = ({ products }) => {
             >
               <FiShoppingCart className="mr-2" />
               Add to Cart
-            </button>
-
-            <button className="w-full mt-4 bg-green-600 text-white py-3 rounded-md hover:bg-green-700 transition-colors">
-              Buy Now
             </button>
           </div>
         </div>
