@@ -1,10 +1,11 @@
 import React from 'react';
 
 const categories = [
-  { label: 'Caps', value: 'Caps' },
-  { label: 'T-Shirts', value: 'Tshirts' },
-  { label: 'Jackets', value: 'Jackets' },
   { label: 'Accessories', value: 'Accessories' },
+  { label: 'Bags', value: 'Bags' },
+  { label: 'Caps', value: 'Caps' },
+  { label: 'Jackets', value: 'Jackets' },
+  { label: 'T-Shirts', value: 'Tshirts' },
 ];
 
 const SidebarFilter = ({ selectedCategories, setSelectedCategories }) => {
@@ -17,7 +18,7 @@ const SidebarFilter = ({ selectedCategories, setSelectedCategories }) => {
   };
 
   return (
-    <div className="w-64 p-4 border-r bg-white">
+    <div className=" p-4 border-r bg-white">
       <h2 className="text-lg font-semibold mb-4">🔍 Search Filter</h2>
       <p className="text-sm font-medium mb-2">By Category</p>
       <div className="flex flex-col gap-2">
