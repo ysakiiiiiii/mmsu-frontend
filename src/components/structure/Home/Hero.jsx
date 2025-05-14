@@ -22,7 +22,7 @@ export default function HeroSection() {
   };
 
   return (
-    <div className="relative bg-white py-30 px-6 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] max-h-none">
+    <div className="relative bg-white py-15 px-5 md:px-12 lg:px-24 overflow-hidden min-h-[90vh] max-h-none">
       <div className="max-w-7xl mx-auto flex flex-col-reverse lg:flex-row items-center justify-between relative z-10">
         {/* Left Content */}
         <motion.div

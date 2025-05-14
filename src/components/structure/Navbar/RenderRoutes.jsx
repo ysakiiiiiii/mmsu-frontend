@@ -1,8 +1,7 @@
-import {Route, Routes} from "react-router-dom";
-import {useContext } from "react";
+import { Route, Routes } from "react-router-dom";
+import { useContext } from "react";
 import { AuthContext } from "../../../auth/AuthWrapper";
 import { nav, button } from "./navigation";
-
 
 export const RenderRoutes = () => {
   const { user } = useContext(AuthContext);
@@ -10,14 +9,9 @@ export const RenderRoutes = () => {
 
   return (
     <Routes>
-
-      {nav.map((r, i) =>
-        // r.role.includes(userRole) ?
-        
-        (
-          <Route key={i} path={r.path} element={r.element} />
-        )
-      )}
+      {nav.map((r, i) => (
+        <Route key={i} path={r.path} element={r.element} />
+      ))}
 
       {button.map((item) => (
         <Route key={item.id} path={item.path} element={item.element} />

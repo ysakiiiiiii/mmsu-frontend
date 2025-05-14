@@ -7,6 +7,8 @@ import Favorites from "../../pages/Favorites";
 import User from "../../pages/User";
 import Admin from "../../pages/Admin";
 import NotFound from "../../pages/NotFound";
+import ProductDetail from "../Store/ProductDetail";
+import { dummyProducts } from "../../pages/Store";
 
 export const nav = [
   {
@@ -24,6 +26,15 @@ export const nav = [
     name: "Store",
     element: <Store />,
     isMenu: true,
+    isPrivate: true,
+  },
+
+  {
+    path: "/store/product/:id",
+    role: ["guest", "private"],
+    name: "ProductDetail",
+    element: <ProductDetail products={dummyProducts} />,
+    isMenu: false,
     isPrivate: true,
   },
 

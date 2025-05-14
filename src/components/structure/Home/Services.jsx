@@ -44,34 +44,33 @@ const services = [
 
 const MMSUServices = () => {
   return (
-    <section className="min-h-[110vh] py-15 px-6 text-center bg-white font-Montserrat-Light">
+    <section className="min-h-[110vh] py-15 px-6 text-center bg-white font-Poppins">
       <div className="text-center pb-10 px-4 md:px-10">
-              <motion.h1
-                className="font-Bebas text-5xl md:text-6xl text-gray-900"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                exit={{ y: 50, opacity: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: false, amount: 0.5 }}
-              >
-               OUR
-                <span className="text-yellow-500"> GOLDEN </span>
-                <span className="text-green-800"> SERVICE </span>
-              </motion.h1>
-      
-              <motion.p
-                className="font-Poppins text-base md:text-lg text-gray-700 mt-4 max-w-2xl mx-auto"
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                exit={{ y: 50, opacity: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                viewport={{ once: false, amount: 0.5 }}
-              >
-                Discover fashion that speaks louder than words. Step into style, turn
-                up the heat, and lead the way with our bold, curated collections.
-              </motion.p>
-      
-            </div>
+        <motion.h1
+          className="font-Bebas text-5xl md:text-6xl text-gray-900"
+          initial={{ y: 50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          exit={{ y: 50, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: false, amount: 0.5 }}
+        >
+          OUR
+          <span className="text-yellow-500"> GOLDEN </span>
+          <span className="text-green-800"> SERVICE </span>
+        </motion.h1>
+
+        <motion.p
+          className="font-Poppins text-base md:text-lg text-gray-700 mt-4 max-w-2xl mx-auto"
+          initial={{ y: 50, opacity: 0 }}
+          whileInView={{ y: 0, opacity: 1 }}
+          exit={{ y: 50, opacity: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          viewport={{ once: false, amount: 0.5 }}
+        >
+          Discover fashion that speaks louder than words. Step into style, turn
+          up the heat, and lead the way with our bold, curated collections.
+        </motion.p>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
         {services.map(({ title, desc, icon }, i) => (
           <motion.div
@@ -83,9 +82,11 @@ const MMSUServices = () => {
             transition={{ duration: 0.5, delay: i * 0.2 }}
             viewport={{ once: false, amount: 0.5 }}
           >
-            <div className="mb-4">{icon}</div>
-            <h3 className="text-xl font-semibold text-black mb-2">{title}</h3>
-            <p className="text-sm text-gray-600">{desc}</p>
+            <div className="flex flex-col items-center gap-2">
+              <div className="mb-2">{icon}</div>
+              <h3 className="text-xl font-semibold text-black mb-1">{title}</h3>
+              <p className="text-sm text-gray-600 text-center">{desc}</p>
+            </div>
           </motion.div>
         ))}
       </div>

@@ -1,37 +1,57 @@
 import React, { useState } from 'react';
 import ProductGrid from '../structure/Store/ProductGrid';
 import SortBar from '../structure/Store/SortBar';
-import SidebarFilter from '../structure/Store/SideFilter';
 
-const dummyProducts = [
-  { id: 1, 
+export const dummyProducts = [
+  { 
+    id: 1, 
     name: 'MMSU Hat', 
     price: '₱150.00', 
     tag: 'PREORDER', 
     image: '/product-image/cap2.png', 
-    category: 'Caps' },
-  { id: 2, 
+    category: 'Caps',
+    color: 'Green',
+    description: 'Official MMSU baseball cap with embroidered logo. Adjustable strap for perfect fit.'
+  },
+  { 
+    id: 2, 
     name: 'MMSU Headband', 
     price: '₱74.00', 
     image: '/product-image/headband.png', 
-    category: 'Accessories' },
-  { id: 3, 
+    category: 'Accessories',
+    color: 'White',
+    description: 'Sample'
+  },
+  { 
+    id: 3, 
     name: 'MMSU Jacket W', 
     price: '₱499.99', 
     tag: 'PREORDER', 
     image: '/product-image/jacket.png', 
-    category: 'Jackets' },
-  { id: 4, 
+    category: 'Jackets',
+    color: 'Green',
+    description: 'Sample'
+  },
+  { 
+    id: 4, 
     name: 'MMSU Tote Bag', 
     price: '₱199.99', 
     image: '/product-image/tote.png', 
-    category: 'Bags' },
+    category: 'Bags',
+    color: 'White',
+    description: 'Sample'
+  },
 ];
-
 
 const Store = () => {
   const [sortOption, setSortOption] = useState('default');
   const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
+
+  // Extract unique categories from products
+  const categories = [...new Set(dummyProducts.map(product => product.category))];
+  // Available colors
+  const colors = ['Green', 'White'];
 
   const sortProducts = (products) => {
     const sorted = [...products];
@@ -49,19 +69,28 @@ const Store = () => {
     }
   };
 
-  const filteredProducts = dummyProducts.filter((product) =>
-    selectedCategories.length === 0 || selectedCategories.includes(product.category)
-  );
+  const filteredProducts = dummyProducts.filter((product) => {
+    const categoryMatch = selectedCategories.length === 0 || 
+                         selectedCategories.includes(product.category);
+    const colorMatch = selectedColors.length === 0 || 
+                      selectedColors.includes(product.color);
+    return categoryMatch && colorMatch;
+  });
 
   return (
     <div className="flex flex-col md:flex-row max-w-7xl mx-auto mt-8 px-4">
-      <SidebarFilter
-        selectedCategories={selectedCategories}
-        setSelectedCategories={setSelectedCategories}
-      />
       <div className="flex-1 md:px-6 mt-4 md:mt-0">
         <h1 className="text-2xl font-bold mb-4">Store</h1>
-        <SortBar sortOption={sortOption} setSortOption={setSortOption} />
+        <SortBar 
+          sortOption={sortOption}
+          setSortOption={setSortOption}
+          categories={categories}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+          colors={colors}
+          selectedColors={selectedColors}
+          setSelectedColors={setSelectedColors}
+        />
         <ProductGrid products={sortProducts(filteredProducts)} />
       </div>
     </div>

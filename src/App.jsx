@@ -2,6 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthWrapper } from "./auth/AuthWrapper";
 import { RenderMenu } from "./components/structure/Navbar/RenderMenu";
 import { RenderRoutes } from "./components/structure/Navbar/RenderRoutes";
+import { StoreProvider } from "./context/StoreContext"; // Import the StoreProvider
 
 function App() {
   return (
@@ -12,12 +13,14 @@ function App() {
         msOverflowStyle: "none",
       }}
     >
-      <div >
+      <div>
         <BrowserRouter>
-          <AuthWrapper>
-            <RenderMenu />
-            <RenderRoutes />
-          </AuthWrapper>
+          <StoreProvider>
+            <AuthWrapper>
+              <RenderMenu />
+              <RenderRoutes />
+            </AuthWrapper>
+          </StoreProvider>
         </BrowserRouter>
       </div>
 
