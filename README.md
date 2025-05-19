@@ -13,14 +13,18 @@ This project is currently a work in progress.
 ✅ 🏠 **Home Page** – Create landing content for visitors  
 ✅ 🔐 **Login Page** – Create login form and authentication flow  
 ✅ 📜 **Footer** – Include contact details, social media, etc.  
+✅ 📄 **About Page** – Add info about MMSU and merchandise  
+✅ 🏪 **Store Page** – Display available merchandise  
+
 
 
 🛠️ The following sections are **still under development**:
 
 ### 🔧 To-Do List for Collaborators
-- 📄 **About Page** – Add info about MMSU and merchandise  
+
 - 🛠️ **Admin Page** – For managing products/orders  
-- 🏪 **Store Page** – Display available merchandise  
+
+TRANSITION TO BACK END
 
 
 Please coordinate tasks and branch names for smoother collaboration.
