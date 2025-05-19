@@ -12,7 +12,7 @@ This project is currently a work in progress.
 ✅ **Navbar with Protected Routing** is already completed.  
 ✅ 🏠 **Home Page** – Create landing content for visitors  
 ✅ 🔐 **Login Page** – Create login form and authentication flow  
-✅ 📜 **Footer** – Include contact details, social media, etc. 
+✅ 📜 **Footer** – Include contact details, social media, etc.  
 ✅ 📄 **About Page** – Add info about MMSU and merchandise  
 ✅ 🏪 **Store Page** – Display available merchandise  
 
