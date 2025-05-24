@@ -1,4 +1,3 @@
-// components/RenderMenu.jsx (updated version)
 import { useState, useContext } from "react";
 import { PiHorseLight } from "react-icons/pi";
 import { GoHeart } from "react-icons/go";
@@ -12,12 +11,17 @@ import MenuItem from "./MenuItem";
 import MobileMenu from "./MobileMenu";
 import { nav } from "./navigation";
 import { AnimatePresence } from "framer-motion";
+import { useStore } from "../../../context/StoreContext";
 
 export const RenderMenu = () => {
   const { user, logout } = useContext(AuthContext);
+  const { cart, favorites } = useStore(); 
   const navigate = useNavigate();
   const userRole = user.isAuthenticated ? user.role : "guest";
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Calculate the total quantity of items in the cart
+  const totalCartQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
   if (userRole === "admin") {
     return null;
@@ -61,24 +65,40 @@ export const RenderMenu = () => {
         <div className="flex items-center gap-3 sm:gap-4">
           {userRole === "private" && (
             <div className="flex gap-2 sm:gap-4">
-              <IconButton 
-                icon={BsPerson} 
-                to="/user" 
+              <IconButton
+                icon={BsPerson}
+                to="/user"
                 tooltip="View Profile"
                 iconSize="text-lg sm:text-xl"
               />
-              <IconButton 
-                icon={GoHeart} 
-                to="/favorites" 
-                tooltip="Favorites"
-                iconSize="text-lg sm:text-xl"
-              />
-              <IconButton 
-                icon={GiShoppingCart} 
-                to="/cart" 
-                tooltip="Cart"
-                iconSize="text-lg sm:text-xl"
-              />
+              {/* Favorites Icon with Quantity Indicator */}
+              <div className="relative"> {/* Add a relative container for positioning the badge */}
+                <IconButton
+                  icon={GoHeart}
+                  to="/favorites"
+                  tooltip="Favorites"
+                  iconSize="text-lg sm:text-xl"
+                />
+                {favorites.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                    {favorites.length > 99 ? "99+" : favorites.length} {/* Display 99+ if count > 99 */}
+                  </span>
+                )}
+              </div>
+              {/* Cart Icon with Quantity Indicator */}
+              <div className="relative"> {/* Add a relative container for positioning the badge */}
+                <IconButton
+                  icon={GiShoppingCart}
+                  to="/cart"
+                  tooltip="Cart"
+                  iconSize="text-lg sm:text-xl"
+                />
+                {totalCartQuantity > 0 && ( 
+                  <span className="absolute -top-1 -right-1 bg-green-600 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                    {totalCartQuantity > 99 ? "99+" : totalCartQuantity} {/* Display 99+ if count > 99 */}
+                  </span>
+                )}
+              </div>
             </div>
           )}
 
