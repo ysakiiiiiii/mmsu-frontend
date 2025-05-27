@@ -112,14 +112,14 @@ export default function Sidebar({ children }) {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         onMouseEnter={() => !isMobile && setHovered(true)}
         onMouseLeave={() => !isMobile && setHovered(false)}
-        className={`mt-15 pt-5 md:pt-2  md:mt-2 z-40 bg-white/60 dark:bg-gray-900/60 backdrop-blur-md h-full shadow-xl fixed top-0 left-0
+        className={`mt-15 pt-5 md:pt-2 md:mt-2 z-40 bg-white/80 dark:bg-gray-900/60 backdrop-blur-md h-full shadow-xl fixed top-0 left-0 rounded-r-2xl
           ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           md:translate-x-0 transition-transform duration-300 overflow-hidden flex flex-col`}
       >
         {/* Desktop Header */}
         <div className="hidden md:flex items-center justify-between p-4">
           {!isCollapsed && (
-            <div className="text-xl font-bold text-teal-700 dark:text-teal-400 whitespace-nowrap">
+            <div className="text-xl font-bold text-teal-700 dark:text-teal-400 font-Lena">
               MMSUmerch
             </div>
           )}
@@ -148,7 +148,6 @@ export default function Sidebar({ children }) {
 
         {/* Nav Items */}
         <nav className="flex-1 flex flex-col relative overflow-y-auto pt-2">
-          {/* Active Link indicator */}
           <motion.div
             layout
             className="absolute left-1 w-1 bg-teal-500 rounded-full z-10"
@@ -156,7 +155,6 @@ export default function Sidebar({ children }) {
             animate={{ top: activeIndex * 43 + 12, height: 40 }}
             transition={{ duration: 0.3 }}
           />
-
           {navItems.map(({ label, icon: Icon, path }, index) => {
             const fullPath = `/admin/${path}`;
             const isActive =
@@ -174,7 +172,7 @@ export default function Sidebar({ children }) {
                 className={`group relative flex items-center gap-3 px-6 py-3 text-sm font-medium transition-all ${
                   isActive
                     ? "bg-teal-100 dark:bg-teal-800 text-teal-700 dark:text-white shadow-md"
-                    : "text-gray-600 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700"
+                    : "text-gray-700 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700"
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -184,14 +182,14 @@ export default function Sidebar({ children }) {
           })}
         </nav>
 
-        {/* Logout Button at Bottom */}
+        {/* Logout Button */}
         <div className="p-2">
           <button
             type="button"
             onClick={handleLogout}
             className={`w-full group relative flex items-center ${
               isCollapsed ? "justify-center" : "justify-start"
-            } gap-3 px-6 py-20 md:py-6 text-sm font-medium text-gray-600 dark:text-gray-300 dark:hover:bg-gray-700 rounded-md hover:text-red-500`}
+            } gap-3 px-6 py-3 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-teal-50 dark:hover:bg-gray-700 hover:text-red-500 rounded-md`}
           >
             <LogOut className="w-5 h-5" />
             {!isCollapsed && <span>Logout</span>}
@@ -199,7 +197,7 @@ export default function Sidebar({ children }) {
         </div>
       </motion.aside>
 
-      {/* Mobile overlay */}
+      {/* Mobile Overlay */}
       {mobileOpen && (
         <div
           onClick={() => setMobileOpen(false)}
@@ -207,12 +205,13 @@ export default function Sidebar({ children }) {
         />
       )}
 
-      {/* Main Content with proper spacing */}
+      {/* Main Content */}
       <main
-        className={`md:pl-4 mt-30 md:pt-0 transition-all duration-300 min-h-screen ${
-          isMounted ? (isCollapsed ? "md:pl-4" : "md:pl-48") : "md:pl-64"
+        className={`transition-all duration-300 min-h-screen ${
+          isMounted ? (isCollapsed ? "md:pl-24" : "md:pl-64") : "md:pl-64"
         }`}
       >
+
         {children}
       </main>
     </div>

@@ -1,0 +1,11 @@
+.react-calendar {
+  background: transparent;
+  border: none;
+  width: 100%;
+}
+
+.react-calendar__tile--now {
+  background: #00bfa5;
+  color: white;
+  border-radius: 50%;
+}
