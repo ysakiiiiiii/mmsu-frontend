@@ -1,9 +1,7 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 
-//This creates a context named AuthContext
 export const AuthContext = createContext();
 
-//Initialize a useState and the values of user
 export const AuthWrapper = ({ children }) => {
   const [user, setUser] = useState({
     name: "",
@@ -13,39 +11,58 @@ export const AuthWrapper = ({ children }) => {
 
   const [isSignup, setIsSignup] = useState(false);
 
-  const login = (userName, password) => {
-    return new Promise((resolve, reject) => {
-      if (password === "password") {
-        const role = userName === "admin" ? "admin" : "private";
-        setUser({ name: userName, role, isAuthenticated: true });
-        resolve("success");
-      } else {
-        reject("Incorrect password");
-      }
-    });
+  const login = async (username, password) => {
+    try {
+      const res = await fetch("http://localhost/MMSU/mmsu-backend/auth/login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Login failed");
+
+      const role = data.role || "customer";
+      setUser({ name: data.username || username, role, isAuthenticated: true });
+
+      return Promise.resolve("success");
+    } catch (err) {
+      return Promise.reject(err);
+    }
   };
 
-  const signup = (userName, password) => {
-    return new Promise((resolve, reject) => {
-      if (password === "password") {
-        const role = userName === "admin" ? "admin" : "private";
-        setUser({ name: userName, role, isAuthenticated: true });
-        resolve("success");
-      } else {
-        reject("Incorrect password");
-      }
-    });
+  const signup = async (username, email, password, repeatPassword) => {
+    try {
+      const res = await fetch("http://localhost/MMSU/mmsu-backend/auth/signup.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: 'include',
+        body: JSON.stringify({ username, email, password, repeatPassword }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || "Signup failed");
+
+      const role = username === "admin" ? "admin" : "customer";
+      setUser({ name: username, role, isAuthenticated: true });
+
+      return Promise.resolve("success");
+    } catch (err) {
+      return Promise.reject(err);
+    }
   };
 
   const logout = () => {
     setUser({ name: "", role: "guest", isAuthenticated: false });
-  };  
+  };
 
   const switchToSignup = () => setIsSignup(true);
   const switchToLogin = () => setIsSignup(false);
 
   return (
-    // This means that whatever component is wrapped with AuthContext will share this values: [user login ... isSignup]
     <AuthContext.Provider
       value={{
         user,
@@ -57,8 +74,16 @@ export const AuthWrapper = ({ children }) => {
         isSignup,
       }}
     >
-      {/* Whatever components wraps with AuthContext shares the value from the AuthContext */}
-      {children} 
+      {children}
     </AuthContext.Provider>
   );
+};
+
+// ✅ This allows you to use `const { user } = useAuth();` in components
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthWrapper");
+  }
+  return context;
 };

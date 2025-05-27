@@ -1,16 +1,10 @@
 import React from 'react';
 import ProtectedRouting from '../../auth/ProtectedRouting';
-import { useStore } from '../../context/StoreContext'; // Make sure path is correct
+import { useStore } from '../../context/StoreContext'; 
 import { FiTrash2, FiPlus, FiMinus } from 'react-icons/fi';
 
 const Cart = () => {
-  // Destructure ALL needed functions from useStore
-  const { 
-    cart, 
-    removeFromCart, 
-    updateCartItemQuantity, 
-    checkout 
-  } = useStore();
+  const { cart, removeFromCart, updateCartItemQuantity, checkout } = useStore();
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => {
@@ -32,7 +26,7 @@ const Cart = () => {
           <div className="flex flex-col md:flex-row gap-8">
             <div className="md:w-2/3">
               {cart.map(item => (
-                <div key={item.id} className="flex items-center border-b py-4">
+                <div key={item.product_id} className="flex items-center border-b py-4">
                   <img 
                     src={item.image} 
                     alt={item.name} 
@@ -44,21 +38,21 @@ const Cart = () => {
                   </div>
                   <div className="flex items-center">
                     <button 
-                      onClick={() => updateCartItemQuantity(item.id, item.quantity - 1)}
+                      onClick={() => updateCartItemQuantity(item.product_id, item.quantity - 1)}
                       className="p-2 text-gray-500 hover:text-blue-500"
                     >
                       <FiMinus />
                     </button>
                     <span className="mx-2 w-8 text-center">{item.quantity}</span>
                     <button 
-                      onClick={() => updateCartItemQuantity(item.id, item.quantity + 1)}
+                      onClick={() => updateCartItemQuantity(item.product_id, item.quantity + 1)}
                       className="p-2 text-gray-500 hover:text-blue-500"
                     >
                       <FiPlus />
                     </button>
                   </div>
                   <button 
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item.product_id)}
                     className="ml-4 p-2 text-gray-500 hover:text-red-500"
                   >
                     <FiTrash2 />

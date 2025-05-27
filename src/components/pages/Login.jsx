@@ -142,7 +142,6 @@ const MutedLink = styled.a`
 `;
 
 export function Login() {
-  //Deconstructs the value from the AuthContext
   const { login, signup, switchToSignup, switchToLogin, isSignup } =
     useContext(AuthContext);
 
@@ -150,7 +149,7 @@ export function Login() {
 
   const [formData, setFormData] = useReducer(
     (formData, newItem) => ({ ...formData, ...newItem }),
-    { userName: "", email: "", password: "", repeatPassword: "" }
+    { username: "", email: "", password: "", repeatPassword: "" }
   );
 
   const [errorMessage, setErrorMessage] = useState(null);
@@ -158,8 +157,8 @@ export function Login() {
 
   const doLogin = async () => {
     try {
-      await login(formData.userName, formData.password);
-      formData.userName === "admin" ? navigate("/admin") : navigate("/");
+      await login(formData.username, formData.password); // username can be username or email
+      formData.username === "admin" ? navigate("/admin") : navigate("/");
     } catch (error) {
       setErrorMessage(error);
     }
@@ -167,7 +166,12 @@ export function Login() {
 
   const doSignup = async () => {
     try {
-      await signup(formData.userName, formData.password);
+      await signup(
+        formData.username,
+        formData.email,
+        formData.password,
+        formData.repeatPassword
+      );
       navigate("/");
     } catch (error) {
       setErrorMessage(error);
@@ -228,21 +232,21 @@ export function Login() {
       </TopContainer>
       <InnerContainer>
         <FormContainer>
+          <Input
+            type="text"
+            placeholder="username or Email"
+            value={formData.username}
+            onChange={(e) => setFormData({ username: e.target.value })}
+          />
+
           {isSignup && (
             <Input
               type="text"
-              placeholder="Username"
-              value={formData.userName}
-              onChange={(e) => setFormData({ userName: e.target.value })}
+              placeholder="Email"
+              value={formData.email || ""}
+              onChange={(e) => setFormData({ email: e.target.value })}
             />
           )}
-
-          <Input
-            type="text"
-            placeholder="Email"
-            value={formData.userName || ""}
-            onChange={(e) => setFormData({ userName: e.target.value })}
-          />
 
           <Input
             type="password"
@@ -262,10 +266,11 @@ export function Login() {
 
           {errorMessage && (
             <div className="error text-xs text-red-500 italic">
-              {errorMessage}
+              {errorMessage.message}
             </div>
           )}
         </FormContainer>
+
         <div className="py-3">
           <MutedLink href="#">Forget your password?</MutedLink>
         </div>

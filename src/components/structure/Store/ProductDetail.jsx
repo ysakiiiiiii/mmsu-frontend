@@ -1,22 +1,48 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { FiHeart, FiShoppingCart, FiChevronLeft } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useStore } from "../../../context/StoreContext";
 import { AuthContext } from '../../../auth/AuthWrapper';
+import { fetchProductById } from '../../data/fetchProductById';
 
-const ProductDetail = ({ products }) => {
+const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const { cart, favorites, addToCart, toggleFavorite } = useStore();
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const { favorites, addToCart, toggleFavorite } = useStore();
   const { user } = useContext(AuthContext);
 
-  const product = products.find(p => p.id === parseInt(id));
-  const isFavorite = favorites.some(item => item.id === product?.id);
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
 
-  if (!product) {
-    return <div>Product not found</div>;
-  }
+    fetchProductById(id)
+      .then((data) => {
+        if (!data) {
+          setError('Product not found');
+          setProduct(null);
+        } else {
+          setProduct(data);
+        }
+      })
+      .catch(() => {
+        setError('Failed to fetch product');
+        setProduct(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) return <div>Loading product...</div>;
+  if (error) return <div className="text-red-600">{error}</div>;
+  if (!product) return null;
+
+  const isFavorite = favorites.some(item => item.id === product.id);
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
@@ -43,15 +69,10 @@ const ProductDetail = ({ products }) => {
     toggleFavorite(product);
   };
 
-  const handleBuyNow = () => {
-    if (!requireAuth('purchase items')) return;
-    addToCart(product, quantity);
-    navigate('/checkout');
-  };
-
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
-      <button 
+      <button
+        type="button" 
         onClick={() => navigate(-1)}
         className="flex items-center text-gray-600 mb-6 hover:text-blue-500 transition-colors"
       >
@@ -81,6 +102,7 @@ const ProductDetail = ({ products }) => {
               <p className="text-xl text-gray-700 font-Montserrat-Light mt-2">{product.price}</p>
             </div>
             <button 
+              type="button"
               className={`p-2 ${isFavorite ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 transition-colors`}
               onClick={handleToggleFavorite}
             >
@@ -99,7 +121,8 @@ const ProductDetail = ({ products }) => {
             <div className="flex items-center mb-6">
               <span className="mr-4 font-Poppins">Quantity:</span>
               <div className="flex items-center border rounded-md">
-                <button 
+                <button
+                  type="button"
                   className="px-3 py-1 text-lg hover:bg-gray-100"
                   onClick={() => setQuantity(q => Math.max(1, q - 1))}
                 >
@@ -112,7 +135,8 @@ const ProductDetail = ({ products }) => {
                   onChange={handleQuantityChange}
                   className="w-12 text-center border-x py-1 outline-none"
                 />
-                <button 
+                <button
+                  type="button"
                   className="px-3 py-1 text-lg hover:bg-gray-100"
                   onClick={() => setQuantity(q => q + 1)}
                 >
@@ -121,7 +145,8 @@ const ProductDetail = ({ products }) => {
               </div>
             </div>
 
-            <button 
+            <button
+              type="button" 
               className="w-full bg-blue-500 text-white py-3 rounded-md hover:bg-blue-600 transition-colors flex items-center justify-center"
               onClick={handleAddToCartClick}
             >

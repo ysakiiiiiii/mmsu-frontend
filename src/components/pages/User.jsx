@@ -7,7 +7,6 @@ import PaymentSection from "../structure/UserDetails/Payment";
 import OrderSummarySection from "../structure/UserDetails/Order";
 import ProfileStatsSection from "../structure/UserDetails/Profile";
 import ReviewsSection from "../structure/UserDetails/Reviews";
-import NotificationsSection from "../structure/UserDetails/Notification";
 import SecuritySection from "../structure/UserDetails/Security";
 
 const Account = () => {
@@ -47,7 +46,6 @@ const Account = () => {
         />
         <ProfileStatsSection />
         <ReviewsSection />
-        <NotificationsSection />
         <SecuritySection />
       </div>
     </ProtectedRouting>

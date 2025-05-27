@@ -8,12 +8,12 @@ import User from "../../pages/User";
 import Admin from "../../pages/Admin";
 import NotFound from "../../pages/NotFound";
 import ProductDetail from "../Store/ProductDetail";
-import { dummyProducts } from "../../pages/Store";
+import { fetchProducts } from '../../data/fetchProducts';
 
 export const nav = [
   {
     path: "/",
-    role: ["guest", "private"],
+    role: ["guest", "customer"],
     name: "Home",
     element: <Home />,
     isMenu: true,
@@ -22,7 +22,7 @@ export const nav = [
 
   {
     path: "/store",
-    role: ["guest", "private"],
+    role: ["guest", "customer"],
     name: "Store",
     element: <Store />,
     isMenu: true,
@@ -31,16 +31,16 @@ export const nav = [
 
   {
     path: "/store/product/:id",
-    role: ["guest", "private"],
+    role: ["guest", "customer"],
     name: "ProductDetail",
-    element: <ProductDetail products={dummyProducts} />,
+    element: <ProductDetail products={fetchProducts} />,
     isMenu: false,
     isPrivate: true,
   },
 
   {
     path: "/about",
-    role: ["guest", "private"],
+    role: ["guest", "customer"],
     name: "About",
     element: <About />,
     isMenu: true,

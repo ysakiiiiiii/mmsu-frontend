@@ -1,23 +1,29 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-const SortBar = ({ 
-  sortOption, 
-  setSortOption, 
-  categories, 
-  selectedCategories, 
+const SortBar = ({
+  sortOption,
+  setSortOption,
+  categories = [],
+  selectedCategories = [],
   setSelectedCategories,
-  colors,
-  selectedColors,
+  colors = [],
+  selectedColors = [],
   setSelectedColors
 }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [categorySelect, setCategorySelect] = useState('');
   const panelRef = useRef(null);
 
   const toggleCategory = (category) => {
-    if (selectedCategories.includes(category)) {
-      setSelectedCategories(selectedCategories.filter(c => c !== category));
-    } else {
-      setSelectedCategories([...selectedCategories, category]);
+    const updatedCategories = selectedCategories.includes(category)
+      ? selectedCategories.filter(c => c !== category)
+      : [...selectedCategories, category];
+
+    setSelectedCategories(updatedCategories);
+
+    // Reset dropdown to default if no categories selected
+    if (updatedCategories.length === 0) {
+      setCategorySelect('');
     }
   };
 
@@ -33,7 +39,6 @@ const SortBar = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (panelRef.current && !panelRef.current.contains(event.target)) {
-        // Check if the click wasn't on the filter button
         const filterButton = document.querySelector('.filter-button');
         if (filterButton && !filterButton.contains(event.target)) {
           setIsFilterOpen(false);
@@ -55,18 +60,19 @@ const SortBar = ({
   return (
     <div className="flex justify-end gap-4 px-4 pt-4 relative">
       <button 
+        type="button"
         onClick={() => setIsFilterOpen(!isFilterOpen)}
         className="filter-button bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-800 transition"
       >
         Filter & Sort
       </button>
 
-      {/* Filter Side Panel */}
       {isFilterOpen && (
         <div 
           ref={panelRef}
           className="absolute top-full right-0 mt-2 w-72 bg-white shadow-lg rounded-md p-4 z-10 border border-gray-200"
         >
+          {/* Sort Options */}
           <div className="mb-4">
             <h3 className="font-medium mb-2">Sort By</h3>
             <select
@@ -82,17 +88,21 @@ const SortBar = ({
             </select>
           </div>
 
+          {/* Category Filter */}
           <div className="mb-4">
             <h3 className="font-medium mb-2">Filter by Category</h3>
             <select 
               className="border px-3 py-1 rounded text-sm w-full"
+              value={categorySelect}
               onChange={(e) => {
-                if (e.target.value) {
-                  toggleCategory(e.target.value);
+                const value = e.target.value;
+                setCategorySelect(value);
+                if (value) {
+                  toggleCategory(value);
                 }
               }}
             >
-              <option value="">Select a category</option>
+              <option value="">All Products</option>
               {categories.map(category => (
                 <option key={category} value={category}>
                   {category}
@@ -100,23 +110,26 @@ const SortBar = ({
               ))}
             </select>
             <div className="mt-2 flex flex-wrap gap-2">
-              {selectedCategories.map(category => (
-                <span 
-                  key={category} 
-                  className="bg-gray-100 px-2 py-1 rounded text-xs flex items-center"
-                >
-                  {category}
-                  <button 
-                    onClick={() => toggleCategory(category)}
-                    className="ml-1 text-gray-500 hover:text-gray-700"
+              {Array.isArray(selectedCategories) &&
+                selectedCategories.map(category => (
+                  <span 
+                    key={category} 
+                    className="bg-gray-100 px-2 py-1 rounded text-xs flex items-center"
                   >
-                    ×
-                  </button>
-                </span>
-              ))}
+                    {category}
+                    <button 
+                      type ="button"
+                      onClick={() => toggleCategory(category)}
+                      className="ml-1 text-gray-500 hover:text-gray-700"
+                    >
+                      ×
+                    </button>
+                  </span>
+                ))}
             </div>
           </div>
 
+          {/* Color Filter */}
           <div>
             <h3 className="font-medium mb-2">Filter by Color</h3>
             <div className="space-y-2">
@@ -126,7 +139,7 @@ const SortBar = ({
                     type="checkbox"
                     checked={selectedColors.includes(color)}
                     onChange={() => toggleColor(color)}
-                    className="rounded text-blue-500"
+                    className="rounded text-green-600"
                   />
                   <span>{color}</span>
                 </label>

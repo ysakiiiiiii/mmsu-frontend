@@ -15,12 +15,12 @@ function App() {
     >
       <div>
         <BrowserRouter>
-          <StoreProvider>
-            <AuthWrapper>
+          <AuthWrapper>
+            <StoreProvider>
               <RenderMenu />
               <RenderRoutes />
-            </AuthWrapper>
-          </StoreProvider>
+            </StoreProvider>
+          </AuthWrapper>
         </BrowserRouter>
       </div>
 

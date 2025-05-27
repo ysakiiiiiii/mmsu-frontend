@@ -40,7 +40,7 @@ export default function HeroSection() {
             <br />
             ALL THE WAY TO TOP
           </h1>
-          <p className="text-gray-500 font-Montserrat-Light text-xs">
+          <p className="text-gray-500 font-Montserrat-Light text-xs md:text-sm">
             Celebrate the legacy of Mariano Marcos State University with
             high-quality apparel and essentials. Perfect for students, alumni,
             and true MMSU supporters.

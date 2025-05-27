@@ -43,7 +43,7 @@ export const RenderMenu = () => {
               <p className="hover:text-yellow-500 transition">MMSU</p>
               <p className="text-green-800">merch</p>
             </div>
-            {user.isAuthenticated && user.role === "private" && (
+            {user.isAuthenticated && user.role === "customer" && (
               <p className="absolute top-9 mt-1 text-xs text-black font-normal font-Poppins">
                 Hello, <span className="font-semibold">{user.name}</span>! 🎉
               </p>
@@ -62,8 +62,8 @@ export const RenderMenu = () => {
         </ul>
 
         {/* Right Section - Adjusted icon sizes */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          {userRole === "private" && (
+        <div className="flex items-center gap-3 sm:gap-6">
+          {userRole === "customer" && (
             <div className="flex gap-2 sm:gap-4">
               <IconButton
                 icon={BsPerson}
@@ -80,7 +80,7 @@ export const RenderMenu = () => {
                   iconSize="text-lg sm:text-xl"
                 />
                 {favorites.length > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                  <span className="text-xs absolute top-5 -right-0.5 bg-red-600 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold font-Poppins">
                     {favorites.length > 99 ? "99+" : favorites.length} {/* Display 99+ if count > 99 */}
                   </span>
                 )}
@@ -94,7 +94,7 @@ export const RenderMenu = () => {
                   iconSize="text-lg sm:text-xl"
                 />
                 {totalCartQuantity > 0 && ( 
-                  <span className="absolute -top-1 -right-1 bg-green-600 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center font-bold">
+                  <span className="text-xs absolute top-5 -right-2 bg-red-600 text-white text-[10px] rounded-full h-4 w-6 flex items-center justify-center font-bold font-Poppins">
                     {totalCartQuantity > 99 ? "99+" : totalCartQuantity} {/* Display 99+ if count > 99 */}
                   </span>
                 )}
