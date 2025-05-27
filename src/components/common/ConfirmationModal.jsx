@@ -5,14 +5,18 @@ import { FiShoppingCart, FiHeart, FiCreditCard, FiCheck } from "react-icons/fi";
 const iconMap = {
   cart: <FiShoppingCart size={24} className="text-white" />,
   favorite: <FiHeart size={24} className="text-white" />,
+  unfavorite: <FiHeart size={24} className="text-white" />,
   checkout: <FiCreditCard size={24} className="text-white" />,
 };
+
 
 const messages = {
   cart: "Added to Cart!",
   favorite: "Added to Favorites!",
+  unfavorite: "Removed from Favorites!",
   checkout: "Order Placed Successfully!",
 };
+
 
 const ConfirmationModal = ({ isOpen, type, onClose }) => {
   const [loadingDone, setLoadingDone] = useState(false);
@@ -91,11 +95,11 @@ const ConfirmationModal = ({ isOpen, type, onClose }) => {
                     {messages[type]}
                   </h3>
                   <p className="text-gray-600 text-center mb-4">
-                    {type === "cart" &&
-                      "Your item has been added to your cart."}
-                    {type === "favorite" &&
-                      "This item has been saved to your favorites."}
+                    {type === "cart" && "Your item has been added to your cart."}
+                    {type === "favorite" && "This item has been saved to your favorites."}
+                    {type === "unfavorite" && "This item has been removed from your favorites."}
                     {type === "checkout" && "Thank you for your purchase!"}
+
                   </p>
                   <button
                     onClick={onClose}

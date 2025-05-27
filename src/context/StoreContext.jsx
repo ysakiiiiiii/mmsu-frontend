@@ -121,7 +121,12 @@ export const StoreProvider = ({ children }) => {
     }
   };
 
-  const toggleFavorite = async (product) => {
+ const toggleFavorite = async (product) => {
+  if (!product) {
+    console.error("toggleFavorite called without a product");
+    return;
+  }
+
   const productId = product.product_id || product.id;
 
   if (!productId) {
@@ -130,20 +135,8 @@ export const StoreProvider = ({ children }) => {
   }
 
   try {
-    // First, refresh the favorites list to ensure we have the latest data
-    await fetchFavorites();
-    
-    // Now check against the freshly updated favorites state
-    const isFavorited = favorites.some(
-      (item) => item.product_id === productId
-    );
-
-    console.log("Is favorited?", isFavorited);
-
-    const endpoint = isFavorited ? "removeFavorite.php" : "addFavorites.php";
-
     const res = await fetch(
-      `http://localhost/MMSU/mmsu-backend/store/${endpoint}`,
+      "http://localhost/MMSU/mmsu-backend/store/toggleFavorite.php",
       {
         method: "POST",
         credentials: "include",
@@ -157,17 +150,28 @@ export const StoreProvider = ({ children }) => {
     const data = await res.json();
     console.log("toggleFavorite response:", data);
 
-    // Refresh favorites list after toggle to ensure UI is in sync
-    await fetchFavorites();
-
-    showModal("favorite");
+    if (data.success) {
+      if (data.action === "added") {
+        setFavorites((prev) => {
+          if (prev.some((item) => (item.product_id || item.id) === productId)) {
+            return prev;
+          }
+          return [...prev, product];
+        });
+        showModal("favorite");
+      } else if (data.action === "removed") {
+        setFavorites((prev) =>
+          prev.filter((item) => (item.product_id || item.id) !== productId)
+        );
+        showModal("unfavorite");
+      }
+    } else {
+      console.error("Failed to toggle favorite:", data);
+    }
   } catch (error) {
     console.error("Error toggling favorite:", error);
   }
 };
-
-
-
 
   const checkout = () => {
     setCart([]);
