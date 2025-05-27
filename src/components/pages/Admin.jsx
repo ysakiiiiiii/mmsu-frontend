@@ -7,12 +7,12 @@ import Products from "../structure/Admin/Products";
 import Categories from "../structure/Admin/Category";
 import AdminRoute from "../structure/Admin/AdminRoute";
 
-export  function Admin() {
+export function Admin() {
   return (
     <AdminRoute>
-      <div className="flex h-screen overflow-hidden">    
+      <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <main className="flex-1 bg-[#f4f6fa] p-6 overflow-y-auto md:pl-25">
+        <main className="flex-1 p-6 overflow-y-auto md:pl-25 bg-transparent">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/transactions" element={<Transactions />} />
@@ -25,5 +25,4 @@ export  function Admin() {
   );
 }
 
-
-export default Admin
+export default Admin;
