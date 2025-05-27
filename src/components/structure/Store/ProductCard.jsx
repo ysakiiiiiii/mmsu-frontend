@@ -16,14 +16,19 @@ const ProductCard = ({ product }) => {
     navigate(`/store/product/${product.id}`);
   };
 
-  const handleAddToCart = (e) => {
-    e.stopPropagation();
-    if (!user.isAuthenticated) {
-      navigate("/login");
-      return;
-    }
-    addToCart(product, 1);
-  };
+  const handleAddToCart = async (e) => {
+  e.stopPropagation();
+  if (!user.isAuthenticated) {
+    navigate("/login");
+    return;
+  }
+  try {
+    await addToCart(product, 1);
+  } catch (error) {
+    console.error("Add to cart failed:", error);
+  }
+};
+
 
   const handleAddToFavorites = (e, product) => {
     e.stopPropagation();

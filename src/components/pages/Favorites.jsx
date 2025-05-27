@@ -2,7 +2,7 @@ import React from "react";
 import ProtectedRouting from "../../auth/ProtectedRouting";
 import { useStore } from "../../context/StoreContext";
 import { useNavigate } from "react-router-dom";
-import ProductCard from "../structure/Store/ProductCard"; 
+import ProductCard from "../structure/Store/ProductCard";
 
 const Favorites = () => {
   const { favorites } = useStore();
@@ -34,8 +34,8 @@ const Favorites = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-6">Your Favorites</h1>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {normalizedFavorites.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {normalizedFavorites.map((product, index) => (
+            <ProductCard key={`${product.id}-${index}`} product={product} />
           ))}
         </div>
       </div>

@@ -12,6 +12,7 @@ const Cart = () => {
       return total + (price * item.quantity);
     }, 0).toFixed(2);
   };
+console.log("Current cart state:", cart);
 
   return (
     <ProtectedRouting>
