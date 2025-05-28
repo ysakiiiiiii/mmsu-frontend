@@ -245,7 +245,7 @@ export function Login() {
               <h1 className="font-Montserrat-ExtraBold text-4xl pb-4">
                 Hello, Friend!
               </h1>
-              <p>Enter your personal details and start your journey with us</p>
+              <p>Choose your fashion style and start shopping with us</p>
               <button
                 type="button"
                 id="login-button"

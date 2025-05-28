@@ -1,5 +1,6 @@
 import React from "react";
-import { FiHeart, FiShoppingCart } from "react-icons/fi";
+import { FiShoppingCart } from "react-icons/fi";
+import { FaHeart } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../../../context/StoreContext";
 import { useContext } from "react";
@@ -10,25 +11,24 @@ const ProductCard = ({ product }) => {
   const { cart, favorites, addToCart, toggleFavorite } = useStore();
   const { user } = useContext(AuthContext);
 
-  const isFavorite = favorites.some((item) => item.id === product.id);
+  const isFavorite = favorites.some((item) => item.product_id == product.id);
 
   const handleProductClick = () => {
     navigate(`/store/product/${product.id}`);
   };
 
   const handleAddToCart = async (e) => {
-  e.stopPropagation();
-  if (!user.isAuthenticated) {
-    navigate("/login");
-    return;
-  }
-  try {
-    await addToCart(product, 1);
-  } catch (error) {
-    console.error("Add to cart failed:", error);
-  }
-};
-
+    e.stopPropagation();
+    if (!user.isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+    try {
+      await addToCart(product, 1);
+    } catch (error) {
+      console.error("Add to cart failed:", error);
+    }
+  };
 
   const handleAddToFavorites = (e, product) => {
     e.stopPropagation();
@@ -44,15 +44,6 @@ const ProductCard = ({ product }) => {
       className="border rounded-md p-4 text-center w-full hover:shadow-md transition-shadow cursor-pointer relative"
       onClick={handleProductClick}
     >
-      {/* Tag */}
-      <div className="h-6 mb-2 flex justify-center items-center">
-        {product.tag === "PREORDER" && (
-          <span className="inline-block bg-green-600 text-white text-xs font-Poppins px-3 py-1 rounded">
-            PREORDER
-          </span>
-        )}
-      </div>
-
       {/* Product image */}
       <img
         src={product.image}
@@ -70,16 +61,18 @@ const ProductCard = ({ product }) => {
 
       {/* Action buttons at bottom center */}
       <div className="flex justify-center space-x-3">
-        <button type="button"
+        <button
+          type="button"
           className={`p-2 ${
             isFavorite ? "text-red-500" : "text-gray-400"
           } hover:text-red-500 transition-colors`}
           onClick={(e) => handleAddToFavorites(e, product)}
         >
-          <FiHeart className="w-4 h-4" />
+          <FaHeart className="w-4 h-4" />
         </button>
 
-        <button type="button"
+        <button
+          type="button"
           className="p-2 text-gray-400 hover:text-blue-500 transition-colors"
           onClick={handleAddToCart}
         >
