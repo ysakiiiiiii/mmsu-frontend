@@ -55,9 +55,19 @@ export const AuthWrapper = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const logout = async () => {
+  try {
+    await fetch("http://localhost/MMSU/mmsu-backend/auth/logout.php", {
+      method: "POST",
+      credentials: "include",
+    });
+  } catch (err) {
+    console.error("Logout failed", err);
+  } finally {
     setUser({ name: "", role: "guest", isAuthenticated: false });
-  };
+  }
+};
+
 
   const switchToSignup = () => setIsSignup(true);
   const switchToLogin = () => setIsSignup(false);
