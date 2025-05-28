@@ -4,6 +4,7 @@ import { fetchProducts } from "../data/fetchProducts";
 import ProductGrid from "../structure/Store/ProductGrid";
 import SortBar from "../structure/Store/SortBar";
 
+
 const Store = () => {
   const [products, setProducts] = useState([]);
   const [sortOption, setSortOption] = useState("default");

@@ -12,7 +12,7 @@ const Dashboard = () => {
     if (task.trim() === "") return;
     setTasks([...tasks, task]);
     setTask("");
-  };
+  };            
 
   const deleteTask = (index) => {
     const newTasks = [...tasks];
@@ -33,7 +33,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-[#dff5f0] to-[#e8f8f5] overflow-x-hidden">
+    <div className="min-h-screen w-full bg-gradient-to-br from-[#dff5f0] to-[#e8f8f5] overflow-x-hidden rounded-2xl">
       <div className="max-w-screen-2xl mx-auto px-6 sm:px-10">
         <h1 className="text-3xl font-bold text-gray-800 mb-8 pt-6">Dashboard</h1>
 
@@ -68,7 +68,7 @@ const Dashboard = () => {
                 placeholder="Add new task"
                 className="flex-grow rounded-l-xl px-4 py-2 border border-gray-300 focus:outline-none"
               />
-              <button
+              <button type="button"
                 onClick={addTask}
                 className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-r-xl"
               >
@@ -82,7 +82,7 @@ const Dashboard = () => {
                   className="bg-white/60 backdrop-blur rounded-xl px-4 py-2 flex justify-between items-center shadow"
                 >
                   <span>{t}</span>
-                  <button
+                  <button type="button"
                     onClick={() => deleteTask(index)}
                     className="text-red-500 hover:text-red-700 font-medium"
                   >

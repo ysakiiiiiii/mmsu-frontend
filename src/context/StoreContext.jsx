@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import ConfirmationModal from "../components/common/ConfirmationModal";
 import { useAuth } from "../auth/AuthWrapper";
 
@@ -13,7 +13,7 @@ export const useStore = () => {
 };
 
 export const StoreProvider = ({ children }) => {
-  const { user } = useAuth(); // ✅ Track the current user
+  const { user } = useAuth(); 
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [modal, setModal] = useState({
@@ -22,7 +22,6 @@ export const StoreProvider = ({ children }) => {
   });
 
   const showModal = (type) => {
-    console.log("Showing modal:", type); // <-- Add this line
     setModal({ isOpen: true, type });
     setTimeout(() => {
       setModal({ isOpen: false, type: null });
@@ -37,7 +36,6 @@ export const StoreProvider = ({ children }) => {
     );
     const data = await res.json();
     console.log("fetchCart response:", data);
-    // Here data is an array directly
     if (Array.isArray(data)) {
       setCart(data);
     } else {

@@ -1,22 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { FiShoppingCart, FiHeart, FiCreditCard, FiCheck } from "react-icons/fi";
+import {
+  FiShoppingCart,
+  FiHeart,
+  FiCreditCard,
+  FiCheck,
+  FiLogIn,
+  FiUserPlus,
+  FiLogOut,
+  FiArrowRightCircle,
+} from "react-icons/fi";
 
 const iconMap = {
   cart: <FiShoppingCart size={24} className="text-white" />,
   favorite: <FiHeart size={24} className="text-white" />,
   unfavorite: <FiHeart size={24} className="text-white" />,
   checkout: <FiCreditCard size={24} className="text-white" />,
+  login: <FiLogIn size={24} className="text-white" />,
+  signup: <FiUserPlus size={24} className="text-white" />,
+  logout: <FiLogOut size={24} className="text-white" />,
+  redirect: <FiArrowRightCircle size={24} className="text-white" />,
 };
-
 
 const messages = {
   cart: "Added to Cart!",
   favorite: "Added to Favorites!",
   unfavorite: "Removed from Favorites!",
   checkout: "Order Placed Successfully!",
+  login: "Login Successful!",
+  signup: "Sign-up Successful!",
+  logout: "Logged Out!",
+  redirect: "Redirecting to Sign In...",
 };
 
+const subMessages = {
+  cart: "Your item has been added to your cart.",
+  favorite: "This item has been saved to your favorites.",
+  unfavorite: "This item has been removed from your favorites.",
+  checkout: "Thank you for your purchase!",
+  login: "Welcome back! You are now logged in.",
+  signup: "You can now log in using your credentials.",
+  logout: "You have been successfully logged out.",
+  redirect: "Please log in to continue.",
+};
 
 const ConfirmationModal = ({ isOpen, type, onClose }) => {
   const [loadingDone, setLoadingDone] = useState(false);
@@ -36,7 +62,7 @@ const ConfirmationModal = ({ isOpen, type, onClose }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black bg-opacity-5 backdrop-blur-sm flex items-center justify-center"
+          className="fixed inset-0 z-1000 bg-black/30 backdrop-blur-sm flex items-center justify-center"
           onClick={onClose}
         >
           <motion.div
@@ -95,11 +121,7 @@ const ConfirmationModal = ({ isOpen, type, onClose }) => {
                     {messages[type]}
                   </h3>
                   <p className="text-gray-600 text-center mb-4">
-                    {type === "cart" && "Your item has been added to your cart."}
-                    {type === "favorite" && "This item has been saved to your favorites."}
-                    {type === "unfavorite" && "This item has been removed from your favorites."}
-                    {type === "checkout" && "Thank you for your purchase!"}
-
+                    {subMessages[type]}
                   </p>
                   <button
                     onClick={onClose}

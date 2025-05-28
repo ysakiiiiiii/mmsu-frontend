@@ -64,11 +64,26 @@
   font-display: swap;
 }
 
+@font-face {
+    font-family: 'Montserrat-ExtraBold';
+    src: url('/fonts/Montserrat-ExtraBold/Montserrat-ExtraBold.eot');
+    src: url('/fonts/Montserrat-ExtraBold/Montserrat-ExtraBold.eot?#iefix') format('embedded-opentype'),
+        url('/fonts/Montserrat-ExtraBold/Montserrat-ExtraBold.woff2') format('woff2'),
+        url('/fonts/Montserrat-ExtraBold/Montserrat-ExtraBold.woff') format('woff'),
+        url('/fonts/Montserrat-ExtraBold/Montserrat-ExtraBold.ttf') format('truetype'),
+        url('/fonts/Montserrat-ExtraBold/Montserrat-ExtraBold.svg#Montserrat-ExtraBold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
 @theme {
   --font-Poppins: Poppins, "sans-serif";
   --font-LibreBaskerville: Libre Baskerville;
   --font-Lena: Lena;
   --font-Montserrat-Light: Montserrat;
+  --font-Montserrat-ExtraBold: Montserrat-ExtraBold;
   --font-Bebas: Bebas Neue;
 }
 
@@ -140,4 +155,16 @@ body::-webkit-scrollbar {
 
 .flipped .backface-visibility-hidden {
   backface-visibility: hidden;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }

@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../auth/AuthWrapper";
 import {
   LayoutDashboard,
   CreditCard,
@@ -31,6 +32,9 @@ export default function Sidebar({ children }) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMounted, setIsMounted] = useState(false);
 
+
+    const {logout } = useContext(AuthContext);
+  
   const toggleSidebar = () => {
     setCollapsed((prev) => {
       const newState = !prev;
@@ -47,8 +51,9 @@ export default function Sidebar({ children }) {
     });
   };
 
-  const handleLogout = () => {
-    navigate("/login");
+   const handleLogout = () => {
+    logout();
+    navigate("/");
   };
 
   useEffect(() => {
@@ -183,7 +188,7 @@ export default function Sidebar({ children }) {
         </nav>
 
         {/* Logout Button */}
-        <div className="p-2">
+        <div className="pb-10">
           <button
             type="button"
             onClick={handleLogout}
@@ -208,7 +213,7 @@ export default function Sidebar({ children }) {
       {/* Main Content */}
       <main
         className={`transition-all duration-300 min-h-screen ${
-          isMounted ? (isCollapsed ? "md:pl-24" : "md:pl-64") : "md:pl-64"
+          isMounted ? (isCollapsed ? "md:pl-24" : "md:pl-68") : "md:pl-68"
         }`}
       >
 

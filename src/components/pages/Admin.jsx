@@ -12,7 +12,7 @@ export function Admin() {
     <AdminRoute>
       <div className="flex h-screen overflow-hidden">
         <Sidebar />
-        <main className="flex-1 p-6 overflow-y-auto md:pl-25 bg-transparent">
+        <main className="flex-1 p-6 overflow-y-auto md:pl-5 bg-transparent">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/transactions" element={<Transactions />} />

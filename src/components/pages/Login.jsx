@@ -1,145 +1,11 @@
-import React, { useContext, useReducer, useState } from "react";
-import styled from "styled-components";
+// Final Login.jsx with integrated UI and maintained AuthContext and backend functionality
+
+import React, { useContext, useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthWrapper";
-import { motion } from "framer-motion";
-
-const BoxContainer = styled.div`
-  width: 280px;
-  min-height: 600px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 19px;
-  background-color: #fff;
-  box-shadow: 0 0 2px rgba(15, 15, 15, 0.28);
-  position: relative;
-  overflow: hidden;
-`;
-
-export const FormContainer = styled.form`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  z-index: 5;
-`;
-
-const TopContainer = styled.div`
-  width: 100%;
-  height: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0 1.8em;
-  padding-bottom: 5em;
-`;
-
-const BackDrop = styled(motion.div)`
-  position: absolute;
-  width: 160%;
-  height: 550px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 50%;
-  top: -290px;
-  left: -70px;
-  transform: rotate(60deg);
-  background: linear-gradient(to top left, #10b981, #84cc16);
-  z-index: 10;
-`;
-
-const HeaderContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-`;
-
-const HeaderText = styled.div`
-  font-size: 30px;
-  font-weight: 600;
-  line-height: 1.24;
-  color: #fff;
-  z-index: 10;
-`;
-
-const SmallText = styled.div`
-  font-size: 11px;
-  font-weight: 500;
-  color: #fff;
-  margin-top: 7px;
-  z-index: 10;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 0px 20px;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  height: 42px;
-  outline: none;
-  border: 1px solid rgba(200, 200, 200, 0.3);
-  border-radius: 5px;
-  padding: 0px 10px;
-  transition: all 200ms ease-in-out;
-  margin-bottom: 5px;
-
-  &::placeholder {
-    color: rgba(200, 200, 200, 1);
-  }
-
-  &:focus {
-    outline: none;
-    border-bottom: 1px solid #16a34a;
-  }
-`;
-
-export const SubmitButton = styled.button`
-  margin: 0 auto;
-  width: 100%;
-  max-width: 150px;
-  padding: 10px;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  border: none;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: all 240ms ease-in-out;
-  background: linear-gradient(to top left, #10b981, #84cc16);
-  box-shadow: 0 0 5px rgba(241, 196, 15, 0.3);
-
-  &:hover {
-    filter: brightness(1.03);
-    background: linear-gradient(to top left, #10b981, #84cc16);
-    box-shadow: 0 0 10px rgba(241, 196, 15, 0.5);
-  }
-`;
-
-const LineText = styled.p`
-  margin: 0 auto;
-  font-size: 12px;
-  color: rgba(200, 200, 200, 0.8);
-  font-weight: 500;
-`;
-
-const BoldLink = styled.a`
-  font-size: 12px;
-  color: #15803d;
-  font-weight: 500;
-  text-decoration: none;
-  border-bottom: 1px dashed rgba(241, 196, 15, 1);
-`;
-
-const MutedLink = styled.a`
-  font-size: 12px;
-  color: rgba(200, 200, 200, 0.8);
-  font-weight: 500;
-  text-decoration: none;
-  border-bottom: 1px dashed rgba(200, 200, 200, 0.8);
-`;
+import ConfirmationModal from "../common/ConfirmationModal";
+import Tooltip from "../common/tooltip";
+import "../structure/Login/login_styles.css";
 
 export function Login() {
   const { login, signup, switchToSignup, switchToLogin, isSignup } =
@@ -153,12 +19,50 @@ export function Login() {
   );
 
   const [errorMessage, setErrorMessage] = useState(null);
-  const [isExpanded, setExpanded] = useState(false);
+  const [modal, setModal] = useState({ isOpen: false, type: null });
+
+  const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    if (errorMessage) {
+      setShowTooltip(true);
+    }
+  }, [errorMessage]);
+
+  const handleTooltipClose = () => {
+    setShowTooltip(false);
+    setErrorMessage(null);
+  };
+
+  const showModal = (type) => {
+    setModal({ isOpen: true, type });
+    setTimeout(() => {
+      setModal({ isOpen: false, type: null });
+    }, 3000);
+  };
+
+  useEffect(() => {
+    const container = document.getElementById("login-container");
+    if (isSignup) {
+      container?.classList.add("right-panel-active");
+    } else {
+      container?.classList.remove("right-panel-active");
+    }
+
+    // Clear input fields and errors on form switch
+    setFormData({ username: "", email: "", password: "", repeatPassword: "" });
+    setErrorMessage(null);
+    setShowTooltip(false);
+  }, [isSignup, setFormData]);
 
   const doLogin = async () => {
     try {
-      await login(formData.username, formData.password); // username can be username or email
-      formData.username === "admin" ? navigate("/admin") : navigate("/");
+      await login(formData.username, formData.password);
+      showModal("login");
+
+      setTimeout(() => {
+        formData.username === "admin" ? navigate("/admin") : navigate("/");
+      }, 1000);
     } catch (error) {
       setErrorMessage(error);
     }
@@ -172,132 +76,189 @@ export function Login() {
         formData.password,
         formData.repeatPassword
       );
-      navigate("/");
+      showModal("signup");
+
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
     } catch (error) {
       setErrorMessage(error);
     }
   };
 
-  const playExpandingAnimation = () => {
-    setExpanded(true);
-    setTimeout(() => {
-      setExpanded(false);
-    }, 700);
-  };
-
-  const handleSwitchToSignup = () => {
-    playExpandingAnimation();
-    setTimeout(() => {
-      switchToSignup();
-    }, 400);
-  };
-
-  const handleSwitchToLogin = () => {
-    playExpandingAnimation();
-    setTimeout(() => {
-      switchToLogin();
-    }, 400);
-  };
+  useEffect(() => {
+    const container = document.getElementById("login-container");
+    if (isSignup) {
+      container?.classList.add("right-panel-active");
+    } else {
+      container?.classList.remove("right-panel-active");
+    }
+  }, [isSignup]);
 
   return (
-    <BoxContainer className="font-Poppins m-auto mt-10">
-      <TopContainer>
-        <BackDrop
-          initial={false}
-          animate={isExpanded ? "expanded" : "collapsed"}
-          variants={{
-            expanded: {
-              width: "250%",
-              height: "1050px",
-              borderRadius: "20%",
-              transform: "rotate(60deg)",
-            },
-            collapsed: {
-              width: "160%",
-              height: "550px",
-              borderRadius: "50%",
-              transform: "rotate(60deg)",
-            },
-          }}
-          transition={{ type: "spring", duration: 2.3, stiffness: 30 }}
+    <div className="login-wrapper">
+      <div className="toggle-buttons">
+        <button
+          className={!isSignup ? "active" : ""}
+          onClick={switchToLogin}
+          type="button"
+        >
+          Sign In
+        </button>
+        <button
+          className={isSignup ? "active" : ""}
+          onClick={switchToSignup}
+          type="button"
+        >
+          Sign Up
+        </button>
+      </div>
+
+      <div id="login-container" className="login-container font-Poppins">
+        <ConfirmationModal
+          isOpen={modal.isOpen}
+          type={modal.type}
+          onClose={() => setModal({ isOpen: false, type: null })}
         />
-        <HeaderContainer className="cursor-pointer">
-          <HeaderText>
-            {isSignup ? "Create Account" : "Welcome Back"}
-          </HeaderText>
-          <SmallText>
-            {isSignup ? "Sign up to continue!" : "Please sign-in to continue!"}
-          </SmallText>
-        </HeaderContainer>
-      </TopContainer>
-      <InnerContainer>
-        <FormContainer>
-          <Input
-            type="text"
-            placeholder="username or Email"
-            value={formData.username}
-            onChange={(e) => setFormData({ username: e.target.value })}
-          />
 
-          {isSignup && (
-            <Input
+        {/* Signup Form */}
+        <div className="form-container sign-up-container">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              doSignup();
+            }}
+          >
+            <h1 className="font-bold pb-2.5 text-xl">Create Account</h1>
+            <span className="text-sm">Fill up the necessay fields</span>
+
+            <input
+              id="login-input"
               type="text"
-              placeholder="Email"
-              value={formData.email || ""}
-              onChange={(e) => setFormData({ email: e.target.value })}
+              placeholder="Username"
+              value={formData.username}
+              onChange={(e) => setFormData({ username: e.target.value })}
+              required
             />
-          )}
-
-          <Input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({ password: e.target.value })}
-          />
-
-          {isSignup && (
-            <Input
+            <input
+              id="login-input"
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({ email: e.target.value })}
+              required
+            />
+            <input
+              id="login-input"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({ password: e.target.value })}
+              required
+            />
+            <input
+              id="login-input"
               type="password"
               placeholder="Repeat Password"
-              value={formData.repeatPassword || ""}
+              value={formData.repeatPassword}
               onChange={(e) => setFormData({ repeatPassword: e.target.value })}
+              required
             />
-          )}
+            {showTooltip && errorMessage && (
+              <Tooltip
+                message={errorMessage.message}
+                onClose={handleTooltipClose}
+                position={{ top: "20px", right: "" }}
+              />
+            )}
 
-          {errorMessage && (
-            <div className="error text-xs text-red-500 italic">
-              {errorMessage.message}
-            </div>
-          )}
-        </FormContainer>
-
-        <div className="py-3">
-          <MutedLink href="#">Forget your password?</MutedLink>
+            <button id="login-button" type="submit" className="mt-4">
+              Sign Up
+            </button>
+          </form>
         </div>
 
-        <SubmitButton
-          type="submit"
-          className="py-20"
-          onClick={isSignup ? doSignup : doLogin}
-        >
-          {isSignup ? "Sign Up" : "Sign In"}
-        </SubmitButton>
+        {/* Login Form */}
+        <div className="form-container sign-in-container">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              doLogin();
+            }}
+          >
+            <h1 className="font-bold pb-2.5 text-xl">Sign in</h1>
+            <span className="text-sm">Fill out to enjoy shopping</span>
+            <input
+              id="login-input"
+              type="text"
+              placeholder="Username"
+              value={formData.username}
+              onChange={(e) => setFormData({ username: e.target.value })}
+              required
+            />
+            <input
+              id="login-input"
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({ password: e.target.value })}
+              required
+            />
+            <a href="#" className="p-4">
+              Forgot your password?
+            </a>
+            {showTooltip && errorMessage && (
+              <Tooltip
+                message={errorMessage.message}
+                onClose={handleTooltipClose}
+                position={{ top: "50px", right: "" }}
+              />
+            )}
 
-        <LineText className="cursor-pointer pt-3">
-          {isSignup ? (
-            <>
-              Already have an account?{" "}
-              <BoldLink onClick={handleSwitchToLogin}>Sign In</BoldLink>
-            </>
-          ) : (
-            <>
-              Don't have an account?{" "}
-              <BoldLink onClick={handleSwitchToSignup}>Sign Up</BoldLink>
-            </>
-          )}
-        </LineText>
-      </InnerContainer>
-    </BoxContainer>
+            <button id="login-button" type="submit">
+              Sign In
+            </button>
+          </form>
+        </div>
+
+        {/* Overlay */}
+        <div className="overlay-container">
+          <div className="overlay">
+            <div className="overlay-panel overlay-left">
+              <h1 className="font-Montserrat-ExtraBold text-4xl pb-4">
+                Welcome Back!
+              </h1>
+              <p>
+                {" "}
+                To keep connected with us please login with your personal info{" "}
+              </p>
+              <button
+                type="button"
+                id="login-button"
+                className="ghost mt-5"
+                onClick={switchToLogin}
+              >
+                Sign In
+              </button>
+            </div>
+            <div className="overlay-panel overlay-right">
+              <h1 className="font-Montserrat-ExtraBold text-4xl pb-4">
+                Hello, Friend!
+              </h1>
+              <p>Enter your personal details and start your journey with us</p>
+              <button
+                type="button"
+                id="login-button"
+                className="ghost mt-5"
+                onClick={switchToSignup}
+              >
+                Sign Up
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

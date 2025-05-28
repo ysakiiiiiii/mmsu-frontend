@@ -2,7 +2,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthWrapper } from "./auth/AuthWrapper";
 import { RenderMenu } from "./components/structure/Navbar/RenderMenu";
 import { RenderRoutes } from "./components/structure/Navbar/RenderRoutes";
-import { StoreProvider } from "./context/StoreContext"; // Import the StoreProvider
+import { StoreProvider } from "./context/StoreContext";
 
 function App() {
   return (
