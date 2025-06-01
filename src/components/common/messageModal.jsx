@@ -31,6 +31,8 @@ const messages = {
   signup: "Sign-up Successful!",
   logout: "Logged Out!",
   redirect: "Redirecting to Sign In...",
+  deleteProduct: "Product Deleted Successfully!",
+  updateProduct: "Product Updated Successfully!"
 };
 
 const subMessages = {
@@ -42,9 +44,11 @@ const subMessages = {
   signup: "You can now log in using your credentials.",
   logout: "You have been successfully logged out.",
   redirect: "Please log in to continue.",
+  deleteProduct: "The item has been deleted successfully!",
+  updateProduct: "The item has been updated successfully!"
 };
 
-const ConfirmationModal = ({ isOpen, type, onClose }) => {
+const MessageModal = ({ isOpen, type, onClose }) => {
   const [loadingDone, setLoadingDone] = useState(false);
 
   useEffect(() => {
@@ -139,4 +143,4 @@ const ConfirmationModal = ({ isOpen, type, onClose }) => {
   );
 };
 
-export default ConfirmationModal;
+export default MessageModal;

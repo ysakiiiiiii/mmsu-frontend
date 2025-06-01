@@ -4,7 +4,6 @@ import Sidebar from "../structure/Admin/Sidebar";
 import Dashboard from "../structure/Admin/Dashboard";
 import Transactions from "../structure/Admin/Transactions";
 import Products from "../structure/Admin/Products";
-import Categories from "../structure/Admin/Category";
 import AdminRoute from "../structure/Admin/AdminRoute";
 
 export function Admin() {
@@ -17,7 +16,6 @@ export function Admin() {
             <Route path="/" element={<Dashboard />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/products" element={<Products />} />
-            <Route path="/categories" element={<Categories />} />
           </Routes>
         </main>
       </div>

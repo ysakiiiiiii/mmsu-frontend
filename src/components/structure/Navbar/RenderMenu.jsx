@@ -11,7 +11,7 @@ import MenuItem from "./MenuItem";
 import MobileMenu from "./MobileMenu";
 import { nav } from "./navigation";
 import { useStore } from "../../../context/StoreContext";
-import ConfirmationModal from "../../common/ConfirmationModal";
+import MessageModal from "../../common/messageModal";
 
 export const RenderMenu = () => {
   const { user, logout } = useContext(AuthContext);
@@ -50,7 +50,7 @@ export const RenderMenu = () => {
 
   return (
     <>
-      <ConfirmationModal
+      <MessageModal
         isOpen={modal.isOpen}
         type={modal.type}
         onClose={() => setModal({ isOpen: false, type: null })}

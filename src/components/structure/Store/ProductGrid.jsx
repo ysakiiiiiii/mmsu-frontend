@@ -1,11 +1,20 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 
-const ProductGrid = ({ products }) => {
+const ProductGrid = ({ products, isAdmin = false, onEdit, onDelete }) => {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-2 sm:px-4 py-4 sm:py-6">
+    <div className="grid grid-cols-2 gap-4  px-2 py-4
+                  sm:grid-cols-3 sm:gap-6  sm:px-1 sm:py-6
+                  md:grid-cols-3 
+                  lg:grid-cols-4 ">
       {products.map(product => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          isAdmin={isAdmin}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ))}
     </div>
   );

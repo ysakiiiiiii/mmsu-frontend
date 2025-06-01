@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import ConfirmationModal from "../components/common/ConfirmationModal";
+import ConfirmationModal from "../components/common/messageModal";
 import { useAuth } from "../auth/AuthWrapper";
 
 const StoreContext = createContext();
@@ -13,7 +13,7 @@ export const useStore = () => {
 };
 
 export const StoreProvider = ({ children }) => {
-  const { user } = useAuth(); 
+  const { user } = useAuth();
   const [cart, setCart] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [modal, setModal] = useState({
@@ -29,24 +29,22 @@ export const StoreProvider = ({ children }) => {
   };
 
   const fetchCart = async () => {
-  try {
-    const res = await fetch(
-      "http://localhost/MMSU/mmsu-backend/store/fetchCart.php",
-      { credentials: "include" }
-    );
-    const data = await res.json();
-    console.log("fetchCart response:", data);
-    if (Array.isArray(data)) {
-      setCart(data);
-    } else {
+    try {
+      const res = await fetch(
+        "http://localhost/MMSU/mmsu-backend/store/fetchCart.php",
+        { credentials: "include" }
+      );
+      const data = await res.json();
+      if (Array.isArray(data)) {
+        setCart(data);
+      } else {
+        setCart([]);
+      }
+    } catch (error) {
+      console.error("Error fetching cart:", error);
       setCart([]);
     }
-  } catch (error) {
-    console.error("Error fetching cart:", error);
-    setCart([]);
-  }
-};
-
+  };
 
   const fetchFavorites = async () => {
     try {
@@ -57,7 +55,6 @@ export const StoreProvider = ({ children }) => {
         }
       );
       const data = await res.json();
-      console.log("fetchFavorites API response:", data);
       if (Array.isArray(data)) {
         setFavorites(data);
       } else {
@@ -79,28 +76,29 @@ export const StoreProvider = ({ children }) => {
     }
   }, [user]);
 
-const addToCart = async (product, quantity) => {
-  try {
-    const response = await fetch("http://localhost/MMSU/mmsu-backend/store/addToCart.php", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ product_id: product.id, quantity }),
-    });
-    const data = await response.json();
+  const addToCart = async (product, quantity) => {
+    try {
+      const response = await fetch(
+        "http://localhost/MMSU/mmsu-backend/store/addToCart.php",
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ product_id: product.id, quantity }),
+        }
+      );
+      const data = await response.json();
 
-    if (data.success) {
-      await fetchCart(); 
-      showModal("cart"); 
-    } else {
-      console.error("Failed to add to cart", data);
+      if (data.success) {
+        await fetchCart();
+        showModal("cart");
+      } else {
+        console.error("Failed to add to cart", data);
+      }
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-
+  };
 
   const removeFromCart = async (productId) => {
     try {

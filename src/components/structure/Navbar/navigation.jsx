@@ -31,7 +31,7 @@ export const nav = [
 
   {
     path: "/store/product/:id",
-    role: ["guest", "customer"],
+    role: ["guest", "customer", "admin"],
     name: "ProductDetail",
     element: <ProductDetail products={fetchProducts} />,
     isMenu: false,

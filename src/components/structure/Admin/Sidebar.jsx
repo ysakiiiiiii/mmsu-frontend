@@ -19,7 +19,6 @@ const navItems = [
   { label: "Dashboard", icon: LayoutDashboard, path: "" },
   { label: "Transaction", icon: CreditCard, path: "transactions" },
   { label: "Product", icon: Package, path: "products" },
-  { label: "Category", icon: Folder, path: "categories" },
 ];
 
 export default function Sidebar({ children }) {

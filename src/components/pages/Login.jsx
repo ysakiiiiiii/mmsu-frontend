@@ -3,7 +3,7 @@
 import React, { useContext, useReducer, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../auth/AuthWrapper";
-import ConfirmationModal from "../common/ConfirmationModal";
+import MessageModal from "../common/messageModal";
 import Tooltip from "../common/tooltip";
 import "../structure/Login/login_styles.css";
 
@@ -106,7 +106,7 @@ export function Login() {
           Sign In
         </button>
         <button
-          className={isSignup ? "active" : ""}
+          className={`login-button ${isSignup ? "active" : ""}`}
           onClick={switchToSignup}
           type="button"
         >
@@ -115,7 +115,7 @@ export function Login() {
       </div>
 
       <div id="login-container" className="login-container font-Poppins">
-        <ConfirmationModal
+        <MessageModal
           isOpen={modal.isOpen}
           type={modal.type}
           onClose={() => setModal({ isOpen: false, type: null })}
@@ -133,7 +133,7 @@ export function Login() {
             <span className="text-sm">Fill up the necessay fields</span>
 
             <input
-              id="login-input"
+              className="login-input"
               type="text"
               placeholder="Username"
               value={formData.username}
@@ -141,7 +141,7 @@ export function Login() {
               required
             />
             <input
-              id="login-input"
+              className="login-input"
               type="email"
               placeholder="Email"
               value={formData.email}
@@ -149,7 +149,7 @@ export function Login() {
               required
             />
             <input
-              id="login-input"
+              className="login-input"
               type="password"
               placeholder="Password"
               value={formData.password}
@@ -157,7 +157,7 @@ export function Login() {
               required
             />
             <input
-              id="login-input"
+              className="login-input"
               type="password"
               placeholder="Repeat Password"
               value={formData.repeatPassword}
@@ -172,7 +172,7 @@ export function Login() {
               />
             )}
 
-            <button id="login-button" type="submit" className="mt-4">
+            <button className="login-button mt-4" type="submit">
               Sign Up
             </button>
           </form>
@@ -189,7 +189,7 @@ export function Login() {
             <h1 className="font-bold pb-2.5 text-xl">Sign in</h1>
             <span className="text-sm">Fill out to enjoy shopping</span>
             <input
-              id="login-input"
+              className="login-input"
               type="text"
               placeholder="Username"
               value={formData.username}
@@ -197,7 +197,7 @@ export function Login() {
               required
             />
             <input
-              id="login-input"
+              className="login-input"
               type="password"
               placeholder="Password"
               value={formData.password}
@@ -215,7 +215,7 @@ export function Login() {
               />
             )}
 
-            <button id="login-button" type="submit">
+            <button className="login-button" type="submit">
               Sign In
             </button>
           </form>
@@ -234,8 +234,7 @@ export function Login() {
               </p>
               <button
                 type="button"
-                id="login-button"
-                className="ghost mt-5"
+                className="login-button ghost mt-5"
                 onClick={switchToLogin}
               >
                 Sign In
@@ -248,8 +247,7 @@ export function Login() {
               <p>Choose your fashion style and start shopping with us</p>
               <button
                 type="button"
-                id="login-button"
-                className="ghost mt-5"
+                className="login-button ghost mt-5"
                 onClick={switchToSignup}
               >
                 Sign Up

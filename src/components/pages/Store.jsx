@@ -4,7 +4,6 @@ import { fetchProducts } from "../data/fetchProducts";
 import ProductGrid from "../structure/Store/ProductGrid";
 import SortBar from "../structure/Store/SortBar";
 
-
 const Store = () => {
   const [products, setProducts] = useState([]);
   const [sortOption, setSortOption] = useState("default");
@@ -51,6 +50,8 @@ const Store = () => {
     return categoryMatch && colorMatch;
   });
 
+  const sortedFilteredProducts = sortProducts(filteredProducts);
+
   return (
     <div className="flex flex-col md:flex-row max-w-7xl mx-auto mt-8 px-4">
       <div className="flex-1 md:px-6 mt-4 md:mt-0">
@@ -60,13 +61,21 @@ const Store = () => {
           setSortOption={setSortOption}
           categories={categories}
           selectedCategories={selectedCategories}
-          setSelectedCategories={setSelectedCategories} 
+          setSelectedCategories={setSelectedCategories}
           colors={colors}
-          selectedColors={selectedColors} 
+          selectedColors={selectedColors}
           setSelectedColors={setSelectedColors}
         />
 
-        <ProductGrid products={sortProducts(filteredProducts)} />
+        {sortedFilteredProducts.length > 0 ? (
+          <ProductGrid products={sortedFilteredProducts} />
+        ) : (
+          <div className="text-center text-gray-500 mt-10">
+            <p className="text-lg">
+              No products are available at the moment. Please wait for further updates. Thank you.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
