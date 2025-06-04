@@ -40,14 +40,6 @@ const AboutHero = () => {
           State University with quality products that showcase your school
           pride.
         </p>
-        <div className="mb-10">
-          <Button
-            onClick={handleShopNow}
-            className="font-Poppins text-xs md:text-[15px] bg-green-600 text-white hover:bg-green-900 transition"
-          >
-            Get Started
-          </Button>
-        </div>
         <div className="flex justify-center gap-3 items-center">
           <div className="flex -space-x-2">
             <img

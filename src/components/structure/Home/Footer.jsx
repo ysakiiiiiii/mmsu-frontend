@@ -17,16 +17,20 @@ const Footer = () => {
           <ul className="space-y-1">
             <li><a href="/" className="hover:underline hover:text-green-300">Home</a></li>
             <li><a href="/about" className="hover:underline hover:text-green-300">About</a></li>
-            <li><a href="/account" className="hover:underline hover:text-green-300">Account</a></li>
-            <li><a href="/contact" className="hover:underline hover:text-green-300">Contact</a></li>
+            <li><a className="hover:underline hover:text-green-300">Account</a></li>
+            <li><a className="hover:underline hover:text-green-300">Contact</a></li>
           </ul>
         </div>
 
         {/* Contact Info */}
         <div>
           <h3 className="font-bold text-lg mb-2">Contact</h3>
-          <p>Email: mmsumerch@univ.ph</p>
-          <p>Phone: +63 912 345 6789</p>
+          <p>
+            Email: <a href="mailto:mmsumerch@univ.ph" className="hover:underline hover:text-green-300">mmsumerch@univ.ph</a>
+          </p>
+          <p>
+            Phone: <a href="tel:+639123456789" className="hover:underline hover:text-green-300">+63 912 345 6789</a>
+          </p>
           <p>Location: MMSU Campus, Ilocos Norte</p>
         </div>
 
@@ -34,10 +38,38 @@ const Footer = () => {
         <div>
           <h3 className="font-bold text-lg mb-2">Follow Us</h3>
           <div className="flex gap-4 mt-2 text-lg">
-            <a href="#" className="hover:text-green-300"><FaFacebookF /></a>
-            <a href="#" className="hover:text-green-300"><FaTwitter /></a>
-            <a href="#" className="hover:text-green-300"><FaInstagram /></a>
-            <a href="#" className="hover:text-green-300"><FaLinkedinIn /></a>
+            <a
+              href="https://www.facebook.com/MMSUofficial"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-300"
+            >
+              <FaFacebookF />
+            </a>
+            <a
+              href="https://x.com/MMSU_official"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-300"
+            >
+              <FaTwitter />
+            </a>
+            <a
+              href="https://www.instagram.com/mmsuofficial/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-300"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://www.linkedin.com/school/mariano-marcos-state-university/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-green-300"
+            >
+              <FaLinkedinIn />
+            </a>
           </div>
         </div>
       </div>

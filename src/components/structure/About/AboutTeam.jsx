@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaLinkedin, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaInstagramSquare, FaTwitter } from "react-icons/fa";
 import Lucky from "./school/lucky.jpg";
 import Lin from "./school/lin.jpg";
 import Russel from "./school/russel.jpg";
@@ -10,18 +10,27 @@ const team = [
     title: "Co-Founder",
     desc: "Growing up, I was always the quiet one in the room, content to observe and listen rather than speak up.",
     img: Lucky,
+    facebook: "https://www.facebook.com/akiiiii.523", 
+    instagram: "https://www.instagram.com/akiidokiee/",
+    twitter: "https://x.com/kishoryy",
   },
   {
     name: "Lin Anthony Pineda",
     title: "Marketing Director",
     desc: "I realized that my reluctance to speak up was holding me back from truly connecting with others.",
     img: Lin,
+    facebook: "https://www.facebook.com/AmeOnna.o7",
+    instagram: "https://www.instagram.com/laaampx", 
+    twitter: "https://x.com/MythB1tch",
   },
   {
     name: "Russel Daguimol",
     title: "Creative Director",
     desc: "The mere thought of standing in front of my peers made my heart race, but I knew it was time to face my fears.",
     img: Russel,
+    facebook: "https://www.facebook.com/russel.daguimol.09", 
+    instagram: "https://www.instagram.com/r.ssl_dgml/", 
+    twitter: "https://x.com/_russel09",
   },
 ];
 
@@ -33,7 +42,7 @@ const TeamCard = ({ member }) => {
   };
 
   return (
-    <div 
+    <div
       className="relative w-full h-full perspective-1000"
       onClick={handleClick}
     >
@@ -59,8 +68,21 @@ const TeamCard = ({ member }) => {
         <div className="absolute inset-0 backface-hidden bg-white rounded-xl p-8 flex flex-col justify-center items-center text-center shadow-lg rotate-y-180">
           <p className="text-gray-600 mb-4">{member.desc}</p>
           <div className="flex justify-center gap-6 text-green-600 text-xl pt-4">
-            <FaLinkedin className="cursor-pointer hover:text-green-800 transition" />
-            <FaTwitter className="cursor-pointer hover:text-green-800 transition" />
+            {member.facebook && ( 
+              <a href={member.facebook} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                <FaFacebook className="cursor-pointer hover:text-green-800 transition" />
+              </a>
+            )}
+            {member.instagram && ( 
+              <a href={member.instagram} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                <FaInstagramSquare className="cursor-pointer hover:text-green-800 transition" />
+              </a>
+            )}
+            {member.twitter && ( 
+              <a href={member.twitter} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                <FaTwitter className="cursor-pointer hover:text-green-800 transition" />
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -76,9 +98,9 @@ const AboutTeam = () => {
         <p className="text-green-800 font-Poppins tracking-wider ">
           MEET THE TEAM
         </p>
-        <h2 className="text-4xl md:text-5xl font-Bebas">THE 
-         <span className="text-green-700"> FACES </span> 
-         BEHIND MMSU 
+        <h2 className="text-4xl md:text-5xl font-Bebas">THE
+         <span className="text-green-700"> FACES </span>
+         BEHIND MMSU
          <span className="text-yellow-500"> MERCH</span></h2>
         <p className="text-gray-600 max-w-2xl mx-auto text-md sm:text-lg font-Poppins">
           Our dedicated team works tirelessly to bring you the best university
