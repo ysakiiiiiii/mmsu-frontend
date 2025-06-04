@@ -18,7 +18,7 @@ export default function HeroSection() {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const handleGetStarted = () => {
-    navigate(user?.isAuthenticated ? "/about" : "/login");
+    navigate(user?.isAuthenticated ? "/store" : "/login");
   };
 
   return (
