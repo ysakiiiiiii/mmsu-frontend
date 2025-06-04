@@ -5,7 +5,7 @@ import { GiShoppingCart } from "react-icons/gi";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { BsPerson } from "react-icons/bs";
 import { AuthContext } from "../../../auth/AuthWrapper";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import IconButton from "./IconButtons";
 import MenuItem from "./MenuItem";
 import MobileMenu from "./MobileMenu";
@@ -14,6 +14,7 @@ import { useStore } from "../../../context/StoreContext";
 import MessageModal from "../../common/messageModal";
 
 export const RenderMenu = () => {
+  const location = useLocation();
   const { user, logout } = useContext(AuthContext);
   const { cart, favorites } = useStore();
   const navigate = useNavigate();
@@ -35,8 +36,8 @@ export const RenderMenu = () => {
   // Calculate total quantity in cart
   const totalCartQuantity = cart.reduce((total, item) => total + item.quantity, 0);
 
-  if (userRole === "admin") {
-    return null;
+    if (location.pathname === "*" || userRole === "admin") {
+    return null; 
   }
 
   const handleLogout = () => {

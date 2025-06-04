@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from "react";
 
-const Tooltip = ({ message, onClose, position = { top: "", right: "0" } }) => {
+const Tooltip = ({ message, onClose, position = { top: "0", right: "0" } }) => {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    // Trigger fade-in
     setVisible(true);
 
-    // Auto close tooltip after 3s with fade-out
     const timer = setTimeout(() => {
       setVisible(false);
-      // Close after fade-out duration (300ms)
       setTimeout(() => {
         onClose();
-      }, 300);
+      }, 300); // allow exit animation
     }, 1000);
 
     return () => clearTimeout(timer);
@@ -27,15 +24,15 @@ const Tooltip = ({ message, onClose, position = { top: "", right: "0" } }) => {
         ...position,
         zIndex: 1000,
         whiteSpace: "nowrap",
-        pointerEvents: "none", // avoid interfering with mouse
+        pointerEvents: "none",
       }}
       role="alert"
       aria-live="assertive"
     >
       {message}
-      <style jsx>{`
+      <style>{`
         .tooltip-container {
-          background: rgba(220, 38, 38, 0.95); /* Tailwind Red-600 with slight transparency */
+          background: rgba(220, 38, 38, 0.95);
           color: white;
           font-size: 0.75rem;
           font-family: "Poppins", sans-serif;
@@ -45,9 +42,7 @@ const Tooltip = ({ message, onClose, position = { top: "", right: "0" } }) => {
           opacity: 0;
           transform: translateY(5px);
           transition: opacity 0.3s ease, transform 0.3s ease;
-          position: relative;
           user-select: none;
-          pointer-events: none;
         }
         .tooltip-container.visible {
           opacity: 1;

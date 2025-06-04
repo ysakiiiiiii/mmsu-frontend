@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useStore } from "../../../context/StoreContext";
 import { AuthContext } from "../../../auth/AuthWrapper";
 import { fetchProductById } from "../../data/fetchProductById";
+import Tooltip from "../../common/tooltip"; // make sure this import path is correct
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [showTooltip, setShowTooltip] = useState(false);
   const { favorites, addToCart, toggleFavorite } = useStore();
   const { user } = useContext(AuthContext);
 
@@ -53,13 +54,17 @@ const ProductDetail = () => {
   const isFavorite = favorites.some((item) => item.id === product.id);
 
   const handleQuantityChange = (e) => {
-    const value = parseInt(e.target.value);
-    if (!isNaN(value) && value > 0) {
-      setQuantity(value);
+    let value = parseInt(e.target.value);
+    if (!isNaN(value)) {
+      if (value > 99) {
+        value = 99;
+        setShowTooltip(true);
+      }
+      setQuantity(Math.max(1, value));
     }
   };
 
-  const requireAuth = (action) => {
+  const requireAuth = () => {
     if (!user.isAuthenticated) {
       navigate("/login", { state: { from: `/store/product/${id}` } });
       return false;
@@ -68,12 +73,12 @@ const ProductDetail = () => {
   };
 
   const handleAddToCartClick = () => {
-    if (!requireAuth("add to cart")) return;
+    if (!requireAuth()) return;
     addToCart(product, quantity);
   };
 
   const handleToggleFavorite = () => {
-    if (!requireAuth("save favorites")) return;
+    if (!requireAuth()) return;
     toggleFavorite(product);
   };
 
@@ -103,7 +108,6 @@ const ProductDetail = () => {
           />
         </div>
 
-        {/* Right panel - Details */}
         <div className="w-full md:w-1/2 flex flex-col justify-between">
           <div>
             <h1 className="text-3xl font-Montserrat-ExtraBold mb-3 text-gray-900">
@@ -121,12 +125,12 @@ const ProductDetail = () => {
             </p>
           </div>
 
-          {/* Quantity on top */}
           <div className="mb-6">
             <span className="font-medium text-gray-700 mb-2 block">
               Quantity:
             </span>
-            <div className="flex items-center border border-gray-300 rounded-md overflow-hidden shadow-sm w-max">
+
+            <div className="relative flex items-center border border-gray-300 rounded-md shadow-sm w-max">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
@@ -145,20 +149,35 @@ const ProductDetail = () => {
               />
               <button
                 type="button"
-                onClick={() => setQuantity((q) => q + 1)}
+                onClick={() => {
+                  if (quantity >= 99) {
+                    setShowTooltip(true);
+                    return;
+                  }
+                  setQuantity((q) => q + 1);
+                }}
                 className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-lg transition-colors select-none"
                 aria-label="Increase quantity"
               >
                 +
               </button>
+
+                {showTooltip && (
+                <Tooltip
+                  message="Max quantity is 99"
+                  position={{ top: "", right: "-8.5rem" }}
+                  onClose={() => setShowTooltip(false)}
+                />
+              )}
+            
             </div>
           </div>
 
-          {/* Buttons side by side */}
           <div className="flex items-center gap-4">
+            
             <button
               type="button"
-              className="flex-1 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-lg py-3 shadow-md transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+              className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 active:bg-green-800 text-white font-semibold rounded-lg py-3 shadow-md transition-transform transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
               onClick={handleAddToCartClick}
               aria-label="Add to cart"
             >
