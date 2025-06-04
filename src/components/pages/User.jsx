@@ -35,11 +35,12 @@ const Account = () => {
     <ProtectedRouting>
       <div className="font-Poppins max-w-7xl mx-auto p-6 grid gap-8">
         <PersonInfo/>
-        <AddressSection
+         <AddressSection 
+          userId={user.id} // Pass the user ID
           profile={profile}
           handleInputChange={handleInputChange}
         />
-        <PaymentSection />
+        <PaymentSection userId={user.id} />
         <OrderSummarySection
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
