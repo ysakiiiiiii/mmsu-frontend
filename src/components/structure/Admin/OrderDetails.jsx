@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ArrowLeft, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -35,61 +35,152 @@ const Button = ({ children, className = "", ...props }) => (
   </button>
 );
 
-const OrderDetails = ({ order, onBack, onStatusChange }) => {
-  const products = [
-    {
-      name: "Face cream",
-      description: "Gender: Women",
-      price: 813,
-      quantity: 2,
-      img: "/products/face-cream.png",
-    },
-    {
-      name: "Nike Jordan",
-      description: "Size: 8UK",
-      price: 392,
-      quantity: 1,
-      img: "/products/nike-jordan.png",
-    },
-    {
-      name: "Oneplus 10",
-      description: "Storage: 128gb",
-      price: 896,
-      quantity: 3,
-      img: "/products/oneplus-10.png",
-    },
-    {
-      name: "Wooden Chair",
-      description: "Material: Wooden",
-      price: 841,
-      quantity: 2,
-      img: "/products/wooden-chair.png",
-    },
-  ];
+const OrderDetails = ({ order, onBack, onStatusChange, onDelete }) => {
+  const [orderData, setOrderData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [currentStatus, setCurrentStatus] = useState(order.status || "Pending");
 
-  const statuses = [
-  "Pending",
-  "Paid",
-  "Delivered",
-  "Failed",
-  "Out for delivery",
-  "Ready to pickup",
-];
+  useEffect(() => {
+    if (!order?.id) return;
 
+    async function fetchOrder() {
+      try {
+        setLoading(true);
+        const res = await fetch(
+          `http://localhost/MMSU/mmsu-backend/transactions/orders_api.php?id=${order.id}`
+        );
+        if (!res.ok) throw new Error("Failed to fetch order data");
+        const data = await res.json();
+        setOrderData(data);
+
+        // Fix: Properly map the status from backend to frontend
+        const statusMapping = {
+          pending: "Pending",
+          failed: "Failed",
+          "out for delivery": "Out for delivery",
+          "ready to pick up": "Ready to pick up",
+          delivered: "Delivered",
+        };
+
+        const frontendStatus = statusMapping[data.status] || "Pending";
+        setCurrentStatus(frontendStatus);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchOrder();
+  }, [order]);
+
+  const handleStatusChange = async (newStatus) => {
+    if (!order?.id) return;
+
+    try {
+      // Optimistically update the UI
+      setCurrentStatus(newStatus);
+
+      // Call the API to update the status
+      const response = await onStatusChange(newStatus);
+
+      if (!response) {
+        // Revert if the API call failed
+        setCurrentStatus(order.status);
+        alert("Failed to update status");
+      }
+    } catch (error) {
+      console.error("Failed to update status:", error);
+      setCurrentStatus(order.status);
+      alert(error.message || "Error updating status");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm("Are you sure you want to delete this order?")) {
+      try {
+        await onDelete(order.id);
+        onBack();
+      } catch (error) {
+        console.error("Failed to delete order:", error);
+      }
+    }
+  };
+
+  if (loading) return <div className="p-6">Loading order details...</div>;
+  if (error) return <div className="p-6 text-red-600">Error: {error}</div>;
+  if (!orderData) return <div className="p-6">No order found.</div>;
+
+  const transformedData = {
+    id: String(orderData.id),
+    products: (orderData.products || []).map((product) => ({
+      ...product,
+      price: String(product.price),
+      quantity: String(product.quantity),
+    })),
+    customer: {
+      id: String(orderData.id),
+      name: String(orderData.customer || "Unknown Customer"),
+      email: String(orderData.customer_details?.email || "No email provided"),
+      mobile: String(orderData.customer_details?.mobile || "No phone provided"),
+      order_count: String(orderData.customer_details?.order_count || "0"),
+      avatar: String(
+        orderData.customer_details?.avatar ||
+          "http://localhost/MMSU/mmsu-backend/assets/default-avatar.png"
+      ),
+    },
+    shipping_address: {
+      line1: String(
+        orderData.shipping_address?.line1 ||
+          orderData.shipping_address?.address ||
+          "No address provided"
+      ),
+      city: String(orderData.shipping_address?.city || ""),
+      province: String(orderData.shipping_address?.province || ""),
+      postal_code: String(
+        orderData.shipping_address?.postal_code ||
+          orderData.shipping_address?.zip_code ||
+          ""
+      ),
+      country: String(orderData.shipping_address?.country || ""),
+    },
+    status: currentStatus,
+    tax: "0",
+    discount: "0",
+    created_at: orderData.date || new Date().toISOString(),
+  };
+
+  const {
+    products,
+    customer,
+    shipping_address,
+    tax = "0",
+    discount = "0",
+    created_at,
+  } = transformedData;
 
   const subtotal = products.reduce(
-    (sum, item) => sum + item.price * item.quantity,
+    (sum, item) => sum + parseFloat(item.price) * parseInt(item.quantity),
     0
   );
-  const tax = 100;
-  const discount = 0;
-  const total = subtotal - discount + tax;
-  const currentStatus = order?.status || "Pending";
+  const total = subtotal - parseFloat(discount) + parseFloat(tax);
 
-  const navigate = useNavigate();
+  const statuses = [
+    { value: "Pending", color: "bg-yellow-100 text-yellow-800" },
+    { value: "Failed", color: "bg-red-100 text-red-800" },
+    { value: "Out for delivery", color: "bg-blue-100 text-blue-800" },
+    { value: "Ready to pick up", color: "bg-indigo-100 text-indigo-800" },
+    { value: "Delivered", color: "bg-green-100 text-green-800" },
+  ];
+
+  const currentStatusObj = statuses.find((s) => s.value === currentStatus) || {
+    value: "Pending",
+    color: "bg-yellow-100 text-yellow-800",
+  };
 
   return (
-    <div className="p-6 space-y-4">
+    <div className="p-6 space-y-4 font-Poppins">
       <button
         onClick={onBack}
         className="flex items-center text-blue-600 mb-4 hover:underline"
@@ -97,56 +188,43 @@ const OrderDetails = ({ order, onBack, onStatusChange }) => {
         <ArrowLeft className="mr-2" size={16} /> Back to Orders
       </button>
 
-      {/* Header with status toggle */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-xl font-semibold">Order {order.id}</h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 items-center">
             <span
-              className={`px-2 py-0.5 rounded-full text-xs font-medium
-              ${
-                currentStatus === "Delivered"
-                  ? "bg-green-100 text-green-800"
-                  : currentStatus === "Pending"
-                  ? "bg-yellow-100 text-yellow-800"
-                  : currentStatus === "Failed"
-                  ? "bg-red-100 text-red-800"
-                  : currentStatus === "Out for delivery"
-                  ? "bg-blue-100 text-blue-800"
-                  : currentStatus === "Ready to pick up"
-                  ? "bg-indigo-100 text-indigo-800"
-                  : "bg-gray-100 text-gray-800"
-              }
-            `}
+              className={`px-2 py-0.5 rounded-full text-xs font-medium ${currentStatusObj.color}`}
             >
-              {currentStatus}
+              {currentStatusObj.value}
             </span>
             <select
               value={currentStatus}
-              onChange={(e) => onStatusChange(e.target.value)}
-              className="ml-4 px-2 py-1 border rounded text-sm"
+              onChange={(e) => handleStatusChange(e.target.value)}
+              className="ml-2 px-2 py-1 border rounded text-sm"
             >
               {statuses.map((status) => (
-                <option key={status} value={status}>
-                  {status}
+                <option key={status.value} value={status.value}>
+                  {status.value}
                 </option>
               ))}
             </select>
           </div>
           <p className="text-sm text-muted-foreground">
-            Aug 17, 2025, 5:48 (ET)
+            {new Date(created_at).toLocaleString()}
           </p>
         </div>
-
-        <Button className="border border-red-500 text-red-500 hover:bg-red-50 gap-2">
+        <Button
+          className="border border-red-500 text-red-500 hover:bg-red-50 gap-2"
+          onClick={handleDelete}
+        >
           <Trash2 className="w-4 h-4" /> Delete Order
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <Card className="md:col-span-2">
           <CardHeader>
             <h3 className="font-medium text-lg">Order details</h3>
-            <Button className="text-violet-600 p-0 h-auto">Edit</Button>
           </CardHeader>
           <CardContent className="px-6">
             <div className="overflow-x-auto">
@@ -164,7 +242,7 @@ const OrderDetails = ({ order, onBack, onStatusChange }) => {
                     <tr key={index} className="border-b">
                       <td className="py-4 flex gap-4 items-center">
                         <img
-                          src={item.img}
+                          src={item.img || "https://via.placeholder.com/50"}
                           alt={item.name}
                           width={50}
                           height={50}
@@ -173,30 +251,35 @@ const OrderDetails = ({ order, onBack, onStatusChange }) => {
                         <div>
                           <div className="font-medium">{item.name}</div>
                           <div className="text-muted-foreground text-xs">
-                            {item.description}
+                            {item.description || "No description"}
                           </div>
                         </div>
                       </td>
-                      <td>${item.price}</td>
+                      <td>P{item.price}</td>
                       <td>{item.quantity}</td>
-                      <td>${item.price * item.quantity}</td>
+                      <td>
+                        P
+                        {(
+                          parseFloat(item.price) * parseInt(item.quantity)
+                        ).toFixed(2)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="mt-4 space-y-1 text-sm text-right">
+            <div className="mt-4 space-y-2 text-sm text-left">
               <p>
-                Subtotal: <strong>${subtotal.toFixed(2)}</strong>
+                Subtotal: <strong>P{subtotal.toFixed(2)}</strong>
               </p>
               <p>
-                Discount: <strong>${discount.toFixed(2)}</strong>
+                Discount: <strong>P{parseFloat(discount).toFixed(2)}</strong>
               </p>
               <p>
-                Tax: <strong>${tax.toFixed(2)}</strong>
+                Tax: <strong>P{parseFloat(tax).toFixed(2)}</strong>
               </p>
               <p className="text-base">
-                Total: <strong>${total.toFixed(2)}</strong>
+                Total: <strong>P{total.toFixed(2)}</strong>
               </p>
             </div>
           </CardContent>
@@ -210,27 +293,27 @@ const OrderDetails = ({ order, onBack, onStatusChange }) => {
             <CardContent className="space-y-4">
               <div className="flex items-center gap-4">
                 <img
-                  src="/avatar.png"
+                  src={customer.avatar}
                   alt="Avatar"
                   width={48}
                   height={48}
                   className="rounded-full"
                 />
                 <div>
-                  <div className="font-medium">Shamus Tuttle</div>
+                  <div className="font-medium">{customer.name}</div>
                   <div className="text-muted-foreground text-sm">
-                    Customer ID: #58909
+                    Customer ID: #{customer.id}
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-2 text-sm">
                 <span className="bg-green-100 text-green-700 rounded-full px-2 py-0.5 text-xs">
-                  12 Orders
+                  {customer.order_count} Orders
                 </span>
               </div>
               <div className="text-sm">
-                <p>Email: Shamus889@yahoo.com</p>
-                <p>Mobile: +1 (609) 972-22-22</p>
+                <p>Email: {customer.email}</p>
+                <p>Mobile: {customer.mobile}</p>
               </div>
             </CardContent>
           </Card>
@@ -238,17 +321,17 @@ const OrderDetails = ({ order, onBack, onStatusChange }) => {
           <Card>
             <CardHeader>
               <h3 className="font-medium text-lg">Shipping address</h3>
-              <Button className="text-violet-600 p-0 h-auto">Edit</Button>
             </CardHeader>
             <CardContent>
               <p className="text-sm">
-                45 Roker Terrace
+                {shipping_address.line1}
                 <br />
-                Latheronwheel
+                {shipping_address.city && `${shipping_address.city}, `}
+                {shipping_address.province && `${shipping_address.province}, `}
+                {shipping_address.postal_code &&
+                  `${shipping_address.postal_code}`}
                 <br />
-                KW5 8NW, London
-                <br />
-                UK
+                {shipping_address.country}
               </p>
             </CardContent>
           </Card>
