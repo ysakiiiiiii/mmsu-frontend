@@ -1,6 +1,5 @@
 import React from "react";
-import { Mail, Phone, MapPin, Linkedin, Instagram } from "lucide-react";
-import { FaBehance } from "react-icons/fa";
+import { Mail, Phone, MapPin, Linkedin, Instagram, Twitter } from "lucide-react";
 
 export default function ContactSection() {
   return (
@@ -8,26 +7,43 @@ export default function ContactSection() {
       {/* Left Column */}
       <div className="space-y-8">
         <h2 className="text-4xl font-bold leading-snug">
-          Let’s talk <br /> on something <span className="text-white underline">great</span> <br /> together
+          Let's talk <br /> on something great <br /> together
         </h2>
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <Mail className="text-white" />
-            <span>mmsumerchshop@gmail.com</span>
+            <a href="mailto:mmsumerchshop@gmail.com" className="hover:underline">
+              mmsumerchshop@gmail.com
+            </a>
           </div>
           <div className="flex items-center gap-3">
             <Phone className="text-white" />
-            <span>+63 912 345 6789</span>
+            <a href="tel:+639123456789" className="hover:underline">
+              +63 912 345 6789
+            </a>
           </div>
           <div className="flex items-center gap-3">
             <MapPin className="text-white" />
-            <span>MMSU Campus, Ilocos Norte</span>
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=MMSU+Campus,+Ilocos+Norte"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:underline"
+            >
+              MMSU Campus, Ilocos Norte
+            </a>
           </div>
         </div>
         <div className="flex gap-6 text-white text-2xl pt-4">
-          <Linkedin />
-          <FaBehance />
-          <Instagram />
+          <a href="https://www.linkedin.com/school/mariano-marcos-state-university/" target="_blank" rel="noopener noreferrer">
+            <Linkedin />
+          </a>
+          <a href="https://www.instagram.com/mmsuofficial/" target="_blank" rel="noopener noreferrer">
+            <Instagram />
+          </a>
+          <a href="https://x.com/MMSU_official" target="_blank" rel="noopener noreferrer">
+            <Twitter />
+          </a>
         </div>
       </div>
 

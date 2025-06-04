@@ -31,7 +31,9 @@ const Footer = () => {
           <p>
             Phone: <a href="tel:+639123456789" className="hover:underline hover:text-green-300">+63 912 345 6789</a>
           </p>
-          <p>Location: MMSU Campus, Ilocos Norte</p>
+          <p>
+            Location: <a href="https://www.google.com/maps/search/?api=1&query=MMSU+Campus,+Ilocos+Norte" className="hover:underline">MMSU Campus, Ilocos Norte </a>
+          </p>
         </div>
 
         {/* Social Media */}
