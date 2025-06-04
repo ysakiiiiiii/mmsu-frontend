@@ -13,10 +13,14 @@ export const AuthWrapper = ({ children }) => {
   const [isSignup, setIsSignup] = useState(false);
 
   // Load user profile from saved id on app load
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem("authUser"));
     if (savedUser?.id) {
-      fetchUserProfile(savedUser.id);
+      fetchUserProfile(savedUser.id).finally(() => setLoading(false));
+    } else {
+      setLoading(false);
     }
   }, []);
 
@@ -33,7 +37,7 @@ export const AuthWrapper = ({ children }) => {
           name: profile.username,
           role: profile.role || "customer",
           isAuthenticated: true,
-          ...profile, // add any other profile fields if needed
+          ...profile,
         });
         localStorage.setItem(
           "authUser",
@@ -45,7 +49,7 @@ export const AuthWrapper = ({ children }) => {
           })
         );
       } else {
-        logout(); // clear on invalid profile
+        logout();
       }
     } catch (err) {
       console.error("Failed to fetch user profile", err);
@@ -92,7 +96,7 @@ export const AuthWrapper = ({ children }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Signup failed");
 
-      // After signup, fetch profile (or you can set directly from signup response)
+      // After signup, fetch profile
       await fetchUserProfile(data.user_id);
 
       return Promise.resolve("success");
@@ -129,6 +133,7 @@ export const AuthWrapper = ({ children }) => {
         switchToSignup,
         switchToLogin,
         isSignup,
+        loading,
       }}
     >
       {children}
