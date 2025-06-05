@@ -35,7 +35,7 @@ const Account = () => {
           currentPage={currentPage}
           setCurrentPage={setCurrentPage}
         />
-        <SecuritySection />
+        <SecuritySection userId={user.id}/>
       </div>
     </ProtectedRouting>
   );
