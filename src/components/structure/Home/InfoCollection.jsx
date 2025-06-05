@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { Truck, Percent, ShieldCheck, Headphones } from "lucide-react";
 import ModelImg from "./hero-image/hero.jpg";
 import Model1 from "./hero-image/model1_copy.jpg";
@@ -12,6 +13,12 @@ import Model8 from "./hero-image/model8.jpg";
 import { motion } from "framer-motion";
 
 const FashionCollection = () => {
+  const navigate = useNavigate();
+
+  const handleShopNow = () => {
+    navigate('/store');
+  };
+
   return (
     <section className="px-3 py-12 lg:px-11 bg-gradient-to-b from-blue-50 to-white">
       <div className="text-center pb-10 px-4 md:px-10">
@@ -57,13 +64,16 @@ const FashionCollection = () => {
           />
 
           <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black to-transparent rounded-b-2xl z-15" />
-
+    
           {/* Content */}
           <div className="relative z-20 p-6 flex items-end h-full">
             <div className="space-y-3 text-white">
               <h2 className="text-2xl font-bold">Heat the season</h2>
               <p>Find the new collection in this season</p>
-              <button className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-green-800 transition">
+              <button 
+                onClick={handleShopNow}
+                className="bg-green-500 text-white px-4 py-2 rounded-full text-sm font-medium hover:bg-green-800 transition"
+              >
                 SHOP NOW
               </button>
             </div>
