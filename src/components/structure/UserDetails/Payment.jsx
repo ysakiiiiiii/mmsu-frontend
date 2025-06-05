@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
+import Tooltip from "../../common/tooltip";
 
 const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
+  const API_BASE_URL = 'http://localhost/MMSU/mmsu-backend/profile/payments.php';
+  
   const [showModal, setShowModal] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [paymentType, setPaymentType] = useState("card");
@@ -13,89 +16,111 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
     gcashPhone: "",
     is_default: false,
   });
+  const [errors, setErrors] = useState({});
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [tooltipMessage, setTooltipMessage] = useState("");
+  const [tooltipPosition, setTooltipPosition] = useState({ top: "0", right: "0" });
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchPayments = async () => {
-      setIsLoading(true);
-      setError(null);
-      try {
-        const response = await fetch(
-          `http://localhost/MMSU/mmsu-backend/profile/payments.php?user_id=${userId}`
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        setPaymentMethods(data);
-      } catch (error) {
-        console.error("Error fetching payment methods:", error);
-        setError("Failed to load payment methods. Please try again.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchPayments();
+    if (userId) {
+      fetchPaymentMethods();
+    }
   }, [userId]);
 
-  const handleAddPayment = async () => {
-    // Validate fields based on payment type
+  const fetchPaymentMethods = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${API_BASE_URL}?user_id=${userId}`);
+      if (!response.ok) throw new Error("Failed to fetch payment methods");
+      const data = await response.json();
+      setPaymentMethods(data);
+    } catch (error) {
+      showErrorTooltip(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const showErrorTooltip = (message, element) => {
+    if (element) {
+      const rect = element.getBoundingClientRect();
+      setTooltipPosition({
+        top: `${rect.bottom + window.scrollY}px`,
+        left: `${rect.left + window.scrollX}px`,
+      });
+    }
+    setTooltipMessage(message);
+    setShowTooltip(true);
+    setTimeout(() => setShowTooltip(false), 3000);
+  };
+
+  const validateInputs = () => {
+    const newErrors = {};
+
     if (paymentType === "card") {
-      if (!newPayment.cardNumber || !newPayment.expiry) {
-        alert("Please fill all card details");
-        return;
+      if (!newPayment.cardNumber) {
+        newErrors.cardNumber = "Card number is required";
+      } else {
+        const cleanCardNumber = newPayment.cardNumber.replace(/\s/g, "");
+        if (cleanCardNumber.length !== 16 || !/^\d+$/.test(cleanCardNumber)) {
+          newErrors.cardNumber = "Please enter a valid 16-digit card number";
+        }
       }
-      
-      const cleanCardNumber = newPayment.cardNumber.replace(/\s/g, "");
-      if (cleanCardNumber.length !== 16 || !/^\d+$/.test(cleanCardNumber)) {
-        alert("Please enter a valid 16-digit card number");
-        return;
+
+      if (!newPayment.expiry) {
+        newErrors.expiry = "Expiry date is required";
+      } else if (!/^\d{2}\/\d{2}$/.test(newPayment.expiry)) {
+        newErrors.expiry = "Please enter expiry date in MM/YY format";
       }
-      
-      if (!/^\d{2}\/\d{2}$/.test(newPayment.expiry)) {
-        alert("Please enter expiry date in MM/YY format");
-        return;
+
+      if (!newPayment.cvv) {
+        newErrors.cvv = "CVV is required";
+      } else if (!/^\d{3,4}$/.test(newPayment.cvv)) {
+        newErrors.cvv = "CVV must be 3 or 4 digits";
       }
     } else if (!newPayment.gcashPhone) {
-      alert("Please enter GCash phone number");
-      return;
+      newErrors.gcashPhone = "GCash phone number is required";
+    } else if (!/^09\d{9}$/.test(newPayment.gcashPhone)) {
+      newErrors.gcashPhone = "Please enter a valid Philippine mobile number (09XXXXXXXXX)";
     }
 
-    setIsLoading(true);
-    setError(null);
-    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleAddPayment = async () => {
+    if (!validateInputs()) return;
+
     try {
-      const payload = {
+      setIsLoading(true);
+      const paymentMethod = {
         user_id: userId,
         type: paymentType,
         is_default: newPayment.is_default,
+        ...(paymentType === "card"
+          ? {
+              card_number: newPayment.cardNumber.replace(/\s/g, ""),
+              card_expiry: newPayment.expiry,
+            }
+          : {
+              gcash_phone: newPayment.gcashPhone,
+            }),
       };
 
-      if (paymentType === "card") {
-        payload.card_number = newPayment.cardNumber.replace(/\s/g, "");
-        payload.card_expiry = newPayment.expiry;
-      } else {
-        payload.gcash_phone = newPayment.gcashPhone;
-      }
-
-      let endpoint = 'http://localhost/MMSU/mmsu-backend/profile/payments.php';
+      let url = API_BASE_URL;
       let method = 'POST';
       
       if (editingPayment) {
-        endpoint += `?id=${editingPayment.payment_id}`;
-        method = 'PUT';
+        paymentMethod.payment_id = editingPayment.payment_id;
       }
 
-      const response = await fetch(endpoint, {
-        method,
+      const response = await fetch(url, {
+        method: method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(paymentMethod),
       });
 
       if (!response.ok) {
@@ -103,21 +128,22 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
         throw new Error(errorData.error || "Failed to save payment method");
       }
 
-      const result = await response.json();
+      const savedPayment = await response.json();
       
       if (editingPayment) {
-        setPaymentMethods(paymentMethods.map(method => 
-          method.payment_id === editingPayment.payment_id ? result : method
-        ));
+        setPaymentMethods(
+          paymentMethods.map((method) =>
+            method.payment_id === editingPayment.payment_id ? savedPayment : method
+          )
+        );
       } else {
-        setPaymentMethods([...paymentMethods, result]);
+        setPaymentMethods([...paymentMethods, savedPayment]);
       }
-      
+
       setShowModal(false);
       resetForm();
     } catch (error) {
-      console.error("Payment save error:", error);
-      setError(error.message || "Failed to save payment method");
+      showErrorTooltip(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -128,27 +154,20 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
       return;
     }
 
-    setIsLoading(true);
-    setError(null);
-    
     try {
-      const response = await fetch(
-        `http://localhost/MMSU/mmsu-backend/profile/payments.php?id=${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+      setIsLoading(true);
+      const response = await fetch(`${API_BASE_URL}?id=${id}`, {
+        method: "DELETE",
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to remove payment method");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete payment method");
       }
 
-      setPaymentMethods(
-        paymentMethods.filter((method) => method.payment_id !== id)
-      );
+      setPaymentMethods(paymentMethods.filter((method) => method.payment_id !== id));
     } catch (error) {
-      console.error("Error removing payment method:", error);
-      setError("Failed to remove payment method");
+      showErrorTooltip(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -179,7 +198,7 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
     });
     setPaymentType("card");
     setEditingPayment(null);
-    setError(null);
+    setErrors({});
   };
 
   const formatCardNumber = (number) => {
@@ -191,35 +210,33 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
   };
 
   const formatExpiry = (value) => {
-    if (value.length === 2 && !value.includes('/')) {
+    if (value.length === 2 && !value.includes("/")) {
       return `${value}/`;
     }
     return value;
   };
 
   const setAsDefault = async (paymentId) => {
-    setIsLoading(true);
-    setError(null);
-    
     try {
-      const response = await fetch(
-        `http://localhost/MMSU/mmsu-backend/profile/payments.php?id=${paymentId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            is_default: true,
-            user_id: userId,
-          }),
-        }
-      );
+      setIsLoading(true);
+      const response = await fetch(API_BASE_URL, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          payment_id: paymentId,
+          is_default: true 
+        }),
+      });
 
       if (!response.ok) {
-        throw new Error("Failed to set as default");
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to set default payment");
       }
 
+      const updatedPayment = await response.json();
+      
       setPaymentMethods(
         paymentMethods.map((method) => ({
           ...method,
@@ -227,8 +244,7 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
         }))
       );
     } catch (error) {
-      console.error("Error setting default payment:", error);
-      setError("Failed to set as default payment");
+      showErrorTooltip(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -236,28 +252,13 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
 
   return (
     <>
-      <section className="bg-white p-3 sm:p-6 shadow rounded-lg sm:rounded-xl">
+      <section className="bg-white p-3 sm:p-6 shadow rounded-lg sm:rounded-xl relative">
         <div className="flex items-center justify-between mb-3 sm:mb-4">
           <h2 className="text-base sm:text-xl font-bold">Payment Methods</h2>
-          <button
-            onClick={toggleEdit}
-            className="text-blue-600 hover:text-blue-800 text-xs sm:text-sm font-medium transition-colors"
-            disabled={isLoading}
-          >
-            {isEditing ? "Save" : "Edit"}
-          </button>
         </div>
 
-        {error && (
-          <div className="mb-4 p-2 bg-red-100 text-red-700 text-sm rounded">
-            {error}
-          </div>
-        )}
-
         {isLoading && paymentMethods.length === 0 ? (
-          <div className="flex justify-center py-4">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500"></div>
-          </div>
+          <p className="text-xs sm:text-sm text-gray-600">Loading payment methods...</p>
         ) : paymentMethods.length === 0 ? (
           <p className="text-xs sm:text-sm text-gray-600">
             No saved payment methods.
@@ -295,57 +296,58 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
                     <button
                       onClick={() => setAsDefault(method.payment_id)}
                       className="text-xs text-blue-600 hover:text-blue-800"
-                      disabled={isLoading}
                     >
                       Set as default
                     </button>
                   )}
                 </div>
-                {isEditing && (
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => handleEditPayment(method)}
-                      className="text-blue-500 hover:text-blue-700 text-xs sm:text-sm"
-                      disabled={isLoading}
-                    >
-                      Edit
-                    </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleEditPayment(method)}
+                    className="text-blue-500 hover:text-blue-700 text-xs sm:text-sm"
+                  >
+                    Edit
+                  </button>
                     <button
                       onClick={() => handleRemovePayment(method.payment_id)}
                       className="text-red-500 hover:text-red-700 text-xs sm:text-sm"
-                      disabled={isLoading}
                     >
                       Remove
                     </button>
-                  </div>
-                )}
+
+                </div>
               </li>
             ))}
           </ul>
         )}
 
         <button
-          onClick={() => setShowModal(true)}
+          onClick={() => {
+            resetForm();
+            setShowModal(true);
+          }}
           className="text-blue-500 hover:text-blue-700 text-xs sm:text-sm mt-2 sm:mt-3 font-medium"
           disabled={isLoading}
         >
-          Add Payment Method
+          {isLoading ? "Loading..." : "Add Payment Method"}
         </button>
+
+        {showTooltip && (
+          <Tooltip
+            message={tooltipMessage}
+            onClose={() => setShowTooltip(false)}
+            position={tooltipPosition}
+          />
+        )}
       </section>
 
       {/* Add/Edit Payment Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-md">
+        <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-lg p-4 sm:p-6 w-full max-w-md relative">
             <h3 className="text-lg sm:text-xl font-bold mb-4">
               {editingPayment ? "Edit Payment Method" : "Add Payment Method"}
             </h3>
-
-            {error && (
-              <div className="mb-4 p-2 bg-red-100 text-red-700 text-sm rounded">
-                {error}
-              </div>
-            )}
 
             <div className="mb-4">
               <label className="block text-xs sm:text-sm text-gray-600 mb-1">
@@ -361,9 +363,9 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
                   }`}
                   onClick={() => {
                     setPaymentType("card");
-                    setNewPayment(prev => ({ ...prev, type: "card" }));
+                    setNewPayment((prev) => ({ ...prev, type: "card" }));
+                    setErrors({});
                   }}
-                  disabled={isLoading}
                 >
                   Credit/Debit Card
                 </button>
@@ -376,9 +378,9 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
                   }`}
                   onClick={() => {
                     setPaymentType("gcash");
-                    setNewPayment(prev => ({ ...prev, type: "gcash" }));
+                    setNewPayment((prev) => ({ ...prev, type: "gcash" }));
+                    setErrors({});
                   }}
-                  disabled={isLoading}
                 >
                   GCash
                 </button>
@@ -388,82 +390,110 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
             <div className="space-y-3 sm:space-y-4">
               {paymentType === "card" ? (
                 <>
-                  <div>
+                  <div className="relative">
                     <label className="block text-xs sm:text-sm text-gray-600 mb-1">
                       Card Number
                     </label>
                     <input
                       type="text"
                       placeholder="1234 5678 9012 3456"
-                      className="w-full px-3 py-2 border rounded text-xs sm:text-sm"
+                      className={`w-full px-3 py-2 border rounded text-xs sm:text-sm ${
+                        errors.cardNumber ? "border-red-500" : ""
+                      }`}
                       value={formatCardNumber(newPayment.cardNumber)}
-                      onChange={(e) =>
+                      onChange={(e) => {
                         setNewPayment({
                           ...newPayment,
                           cardNumber: e.target.value.replace(/\s/g, ""),
-                        })
-                      }
+                        });
+                        if (errors.cardNumber) setErrors({ ...errors, cardNumber: null });
+                      }}
                       maxLength={19}
-                      disabled={isLoading}
                     />
+                    {errors.cardNumber && (
+                      <span className="absolute -bottom-5 left-0 text-red-500 text-xs">
+                        {errors.cardNumber}
+                      </span>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-2 gap-3">
-                    <div>
+                    <div className="relative">
                       <label className="block text-xs sm:text-sm text-gray-600 mb-1">
                         Expiry Date
                       </label>
                       <input
                         type="text"
                         placeholder="MM/YY"
-                        className="w-full px-3 py-2 border rounded text-xs sm:text-sm"
+                        className={`w-full px-3 py-2 border rounded text-xs sm:text-sm ${
+                          errors.expiry ? "border-red-500" : ""
+                        }`}
                         value={newPayment.expiry}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setNewPayment({
                             ...newPayment,
                             expiry: formatExpiry(e.target.value),
-                          })
-                        }
+                          });
+                          if (errors.expiry) setErrors({ ...errors, expiry: null });
+                        }}
                         maxLength={5}
-                        disabled={isLoading}
                       />
+                      {errors.expiry && (
+                        <span className="absolute -bottom-5 left-0 text-red-500 text-xs">
+                          {errors.expiry}
+                        </span>
+                      )}
                     </div>
-                    <div>
+                    <div className="relative">
                       <label className="block text-xs sm:text-sm text-gray-600 mb-1">
                         CVV
                       </label>
                       <input
                         type="password"
                         placeholder="123"
-                        className="w-full px-3 py-2 border rounded text-xs sm:text-sm"
+                        className={`w-full px-3 py-2 border rounded text-xs sm:text-sm ${
+                          errors.cvv ? "border-red-500" : ""
+                        }`}
                         value={newPayment.cvv}
-                        onChange={(e) =>
-                          setNewPayment({ ...newPayment, cvv: e.target.value })
-                        }
+                        onChange={(e) => {
+                          setNewPayment({ ...newPayment, cvv: e.target.value });
+                          if (errors.cvv) setErrors({ ...errors, cvv: null });
+                        }}
                         maxLength={4}
-                        disabled={isLoading}
                       />
+                      {errors.cvv && (
+                        <span className="absolute -bottom-5 left-0 text-red-500 text-xs">
+                          {errors.cvv}
+                        </span>
+                      )}
                     </div>
                   </div>
                 </>
               ) : (
-                <div>
+                <div className="relative">
                   <label className="block text-xs sm:text-sm text-gray-600 mb-1">
                     GCash Phone Number
                   </label>
                   <input
                     type="tel"
                     placeholder="0912 345 6789"
-                    className="w-full px-3 py-2 border rounded text-xs sm:text-sm"
+                    className={`w-full px-3 py-2 border rounded text-xs sm:text-sm ${
+                      errors.gcashPhone ? "border-red-500" : ""
+                    }`}
                     value={newPayment.gcashPhone}
-                    onChange={(e) =>
+                    onChange={(e) => {
                       setNewPayment({
                         ...newPayment,
                         gcashPhone: e.target.value,
-                      })
-                    }
-                    disabled={isLoading}
+                      });
+                      if (errors.gcashPhone) setErrors({ ...errors, gcashPhone: null });
+                    }}
                   />
+                  {errors.gcashPhone && (
+                    <span className="absolute -bottom-5 left-0 text-red-500 text-xs">
+                      {errors.gcashPhone}
+                    </span>
+                  )}
                 </div>
               )}
 
@@ -479,7 +509,6 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
                     })
                   }
                   className="mr-2"
-                  disabled={isLoading}
                 />
                 <label
                   htmlFor="defaultPayment"
@@ -503,20 +532,10 @@ const PaymentSection = ({ isEditing, toggleEdit, userId }) => {
               </button>
               <button
                 onClick={handleAddPayment}
-                className="px-3 py-1.5 text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 text-white rounded flex items-center justify-center"
+                className="px-3 py-1.5 text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 text-white rounded"
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <>
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Processing...
-                  </>
-                ) : (
-                  editingPayment ? "Update" : "Add"
-                )}
+                {isLoading ? "Processing..." : editingPayment ? "Update" : "Add"}
               </button>
             </div>
           </div>

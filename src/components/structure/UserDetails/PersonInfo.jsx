@@ -1,55 +1,11 @@
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import axios from "axios";
 import Profile from "./user-image/user.png";
 import { AuthContext } from "../../../auth/AuthWrapper";
 
 const PersonalInfoSection = () => {
   const { user, setUser } = useContext(AuthContext);
-  const [isEditing, setIsEditing] = useState(false);
   const fileInputRef = useRef(null);
-
-  // Handle input changes for name and email
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
-  };
-
-  // Save profile changes to backend
-  const saveProfileChanges = async () => {
-    try {
-      const res = await axios.post(
-        "http://localhost/MMSU/mmsu-backend/profile/update_user_profile.php",
-        {
-          user_id: user.id,
-          name: user.name,
-          email: user.email,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
-      );
-
-      if (res.data.success) {
-        alert("Profile updated successfully");
-      } else {
-        alert("Update failed: " + (res.data.message ?? "Unknown error"));
-      }
-    } catch (err) {
-      alert("Error updating profile: " + err.message);
-    }
-  };
-
-  // Toggle edit mode and save on "Save"
-  const handleEditToggle = async () => {
-    if (isEditing) {
-      await saveProfileChanges();
-    }
-    setIsEditing((prev) => !prev);
-  };
 
   // Trigger hidden file input click
   const handleImageClick = () => {
@@ -122,32 +78,6 @@ const PersonalInfoSection = () => {
           onChange={handleImageChange}
         />
 
-        {isEditing ? (
-          <div className="mt-2 sm:mt-4 space-y-1 sm:space-y-2">
-            <input
-              type="text"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-              className="w-full text-sm sm:text-base border rounded px-2 py-1 sm:px-3 sm:py-2"
-            />
-            <input
-              type="email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-              className="w-full text-xs sm:text-sm border rounded px-2 py-1 sm:px-3 sm:py-2"
-            />
-          </div>
-        ) : (
-          <div className="mt-2 sm:mt-4">
-            <h2 className="text-sm sm:text-lg font-semibold">{user.name}</h2>
-            <p className="text-xs sm:text-sm text-gray-500 truncate">
-              {user.email}
-            </p>
-          </div>
-        )}
-
         {/* Example user stats */}
         <div className="mt-3 sm:mt-4 grid grid-cols-3 sm:flex sm:justify-center sm:gap-6">
           <div className="text-center">
@@ -176,13 +106,6 @@ const PersonalInfoSection = () => {
             className="px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm bg-blue-500 hover:bg-blue-600 text-white rounded transition-colors"
           >
             Change<span className="hidden sm:inline"> Profile</span> Picture
-          </button>
-          <button
-            type="button"
-            onClick={handleEditToggle}
-            className="px-3 py-1 sm:px-4 sm:py-2 text-xs sm:text-sm bg-gray-200 hover:bg-gray-300 text-gray-800 rounded transition-colors"
-          >
-            {isEditing ? "Save" : "Edit"}
           </button>
         </div>
       </div>
