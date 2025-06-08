@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ProtectedRouting from "../../auth/ProtectedRouting";
+import { useAuth } from "../../auth/AuthWrapper";
 import { useStore } from "../../context/StoreContext";
 import { FiTrash2, FiPlus, FiMinus } from "react-icons/fi";
-import CheckoutModal from "../common/checkOutModal"; // <-- Import your modal
+import CheckoutModal from "../common/checkOutModal";
 
 const CartItem = ({ item, updateCartItemQuantity, removeFromCart }) => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -90,6 +91,7 @@ const CartItem = ({ item, updateCartItemQuantity, removeFromCart }) => {
 const Cart = () => {
   const { cart, removeFromCart, updateCartItemQuantity, checkout } = useStore();
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const { user } = useAuth();
 
   const calculateTotal = () => {
     return cart
@@ -100,7 +102,6 @@ const Cart = () => {
       .toFixed(2);
   };
   const handleCheckoutConfirm = (checkoutData) => {
-
     checkout(checkoutData);
     setIsCheckoutOpen(false);
   };
@@ -149,12 +150,12 @@ const Cart = () => {
             </div>
           </div>
         )}
-
         {/* Checkout Modal */}
         <CheckoutModal
           isOpen={isCheckoutOpen}
           onClose={() => setIsCheckoutOpen(false)}
           onCheckout={handleCheckoutConfirm}
+          currentUser={user} // Add this line
         />
       </div>
     </ProtectedRouting>
